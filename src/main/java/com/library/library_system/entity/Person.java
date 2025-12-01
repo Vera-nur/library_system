@@ -1,13 +1,10 @@
 package com.library.library_system.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 @Entity
-@Getter
-@Setter
 @Table(name = "person")
+@Data
 public class Person {
 
     @Id
@@ -15,4 +12,10 @@ public class Person {
     private Integer person_id;
 
     private String name;
+    private String surname;
+    private String tel;
+    private String email;
+    private String address;
+    private String password;
+    private String person_type;
 }
