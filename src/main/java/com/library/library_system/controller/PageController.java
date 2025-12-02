@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
 
-    @GetMapping("/")
-    public String index() {
-        return "index"; // templates/index.html
-    }
+
+    //Bu kısım için homecontroller kısmını ekledim
+    //@GetMapping("/")
+    //public String index() {
+       // return "index"; // templates/index.html
+    //}
 
     @GetMapping("/layout-static")
     public String layoutStatic() {
