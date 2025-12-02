@@ -17,6 +17,7 @@ public class Book {
     @Column(name = "book_name", nullable = false)
     private String bookName;
 
+    @Column(name = "stock")
     private Integer stock;
 
     @ManyToOne
