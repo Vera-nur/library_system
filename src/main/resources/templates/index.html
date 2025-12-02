@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -70,28 +70,28 @@
 
                     <div class="sb-sidenav-menu-heading">KÜTÜPHANE</div>
 
-                    <a class="nav-link" href="#!">
+                    <a class="nav-link" th:href="@{/books}">
                         <div class="sb-nav-link-icon">
                             <i class="fas fa-book"></i>
                         </div>
                         Kitaplar
                     </a>
 
-                    <a class="nav-link" href="#!">
+                    <a class="nav-link" th:href="@{/users}">
                         <div class="sb-nav-link-icon">
                             <i class="fas fa-users"></i>
                         </div>
                         Üyeler
                     </a>
 
-                    <a class="nav-link" href="#!">
+                    <a class="nav-link" th:href="@{/borrows}">
                         <div class="sb-nav-link-icon">
                             <i class="fas fa-hand-holding"></i>
                         </div>
                         Ödünç İşlemleri
                     </a>
 
-                    <a class="nav-link" href="#!">
+                    <a class="nav-link" th:href="@{/overdue}">
                         <div class="sb-nav-link-icon">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
@@ -99,7 +99,7 @@
                     </a>
 
                     <div class="sb-sidenav-menu-heading">RAPORLAR</div>
-                    <a class="nav-link" href="#!">
+                    <a class="nav-link" th:href="@{/stats}">
                         <div class="sb-nav-link-icon">
                             <i class="fas fa-chart-bar"></i>
                         </div>
