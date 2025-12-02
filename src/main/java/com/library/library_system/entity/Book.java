@@ -17,6 +17,8 @@ public class Book {
     @Column(name = "book_name", nullable = false)
     private String bookName;
 
+    private Integer stock;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

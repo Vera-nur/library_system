@@ -2,6 +2,9 @@ package com.library.library_system.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notification")
@@ -13,6 +16,10 @@ public class Notification {
     @Column(name = "notification_id")
     private Integer notificationId;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Column(name = "notification_text", nullable = false, length = 500)
     private String notificationText;
 
@@ -23,5 +30,10 @@ public class Notification {
 
     // Hangi objeye bağlı olduğunu tutan id (Reservation.id, Fine.id vs.)
     @Column(name = "related_entity_id", nullable = false)
-    private Integer typeId;
+    private Integer relatedEntityId; //kod tarafındna yüklenecek
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }
+

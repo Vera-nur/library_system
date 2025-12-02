@@ -6,18 +6,22 @@ import lombok.*;
 @Table(name = "person")
 @Data
 public class Person {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer person_id;
+    @Column(name = "person_id")
+    private Integer id;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String surname;
+
     private String tel;
-    @Column(unique = true, nullable = false)
     private String email;
     private String address;
-    @Column(nullable = false)
     private String password;
-    private String person_type;
+
+    @Column(name = "person_type")
+    private String personType; // 'user' veya 'worker'
 }

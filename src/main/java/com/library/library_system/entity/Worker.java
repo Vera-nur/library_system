@@ -19,6 +19,7 @@ public class Worker {
     @JoinColumn(name = "person_id", referencedColumnName = "person_id", nullable = false)
     private Person person;
 
-    @OneToMany(mappedBy = "worker")
-    private List<AccessLog> accessLogs;   // Bu çalışanın yaptığı tüm işlemler
+    //bu kısmı bir classta yapmak daha mantıklı olabilir
+    //@OneToMany(mappedBy = "worker")
+    //private List<AccessLog> accessLogs;   // Bu çalışanın yaptığı tüm işlemler
 }
