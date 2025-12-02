@@ -63,21 +63,29 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Kitap Adı</th>
-                                <th>Stok</th>
+                                <th>Yazar</th>    <th>Kategori</th> <th>Tür</th>      <th>Stok</th>
                                 <th>İşlemler</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="book : ${books}">
-                                <td th:text="${book.bookId}">1</td>
-                                <td th:text="${book.bookName}">Örnek Kitap</td>
-                                <td th:text="${book.stock}">10</td>
+                                <td th:text="${book.bookId}"></td>
+                                <td th:text="${book.bookName}"></td>
+                                <td th:text="${book.authorName}"></td>   <td th:text="${book.categoryName}"></td> <td>
+                                <span th:if="${book.type == 'physical'}" class="badge bg-secondary">Fiziksel</span>
+                                <span th:unless="${book.type == 'physical'}" class="badge bg-info">Dijital</span>
+                            </td>
+
+                                <td th:text="${book.stock}"></td>
+
                                 <td>
-                                    <form th:action="@{'/books/' + ${book.bookId} + '/delete'}"
-                                          method="post"
-                                          onsubmit="return confirm('Bu kitabı silmek istediğine emin misin?');">
+                                    <a th:href="@{'/borrows/book/' + ${book.bookId}}" class="btn btn-sm btn-success">
+                                        <i class="fas fa-hand-holding"></i> Ödünç Ver
+                                    </a>
+                                    <form th:action="@{'/books/' + ${book.bookId} + '/delete'}" method="post"
+                                          onsubmit="return confirm('Silmek istediğine emin misin?');" style="display:inline;">
                                         <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash-alt"></i> Sil
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
                                 </td>

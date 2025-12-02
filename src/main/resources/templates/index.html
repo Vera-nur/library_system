@@ -127,7 +127,7 @@
                 <div class="row">
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-primary text-white mb-4">
-                            <div class="card-body">Toplam Kitap Sayısı</div>
+                            <div class="card-body">Toplam Kitap Sayısı <h2 th:text="${stats.totalBooks}">0</h2> </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-white stretched-link" href="#!">Detayları Gör</a>
                                 <div class="small text-white">
@@ -139,7 +139,7 @@
 
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-success text-white mb-4">
-                            <div class="card-body">Ödünçte Olan Kitaplar</div>
+                            <div class="card-body">Ödünçte Olan Kitaplar <h2 th:text="${stats.activeLoans}">0</h2> </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-white stretched-link" href="#!">Listeyi Gör</a>
                                 <div class="small text-white">
@@ -151,7 +151,7 @@
 
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-warning text-white mb-4">
-                            <div class="card-body">Gecikmiş Kitaplar</div>
+                            <div class="card-body">Gecikmiş Kitaplar <h2 th:text="${stats.overdueBooks}">0</h2> </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-white stretched-link" href="#!">Gecikmeler</a>
                                 <div class="small text-white">
@@ -163,7 +163,7 @@
 
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-info text-white mb-4">
-                            <div class="card-body">Toplam Üye Sayısı</div>
+                            <div class="card-body">Toplam Üye Sayısı <h2 th:text="${stats.totalMembers}">0</h2> </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-white stretched-link" href="#!">Üyeleri Gör</a>
                                 <div class="small text-white">
@@ -178,10 +178,10 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        Son Ödünç Alma İşlemleri
+                        Son 10 Ödünç Alma İşlemleri
                     </div>
                     <div class="card-body">
-                        <table id="datatablesSimple">
+                        <table id="simpleTable" class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>Üye Adı</th>
@@ -192,26 +192,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Ahmet Yılmaz</td>
-                                <td>Suç ve Ceza</td>
-                                <td>2025-11-28</td>
-                                <td>2025-12-05</td>
-                                <td>Ödünçte</td>
-                            </tr>
-                            <tr>
-                                <td>Ayşe Demir</td>
-                                <td>1984</td>
-                                <td>2025-11-20</td>
-                                <td>2025-11-27</td>
-                                <td>İade Edildi</td>
-                            </tr>
-                            <tr>
-                                <td>Mehmet Kara</td>
-                                <td>Kürk Mantolu Madonna</td>
-                                <td>2025-11-15</td>
-                                <td>2025-11-22</td>
-                                <td>Gecikmiş</td>
+                            <tr th:each="borrow : ${borrowList}">
+
+                                <td th:text="${borrow.fullName}"></td>
+                                <td th:text="${borrow.bookName}"></td>
+                                <td th:text="${borrow.startDate}"></td>
+                                <td th:text="${borrow.endDate}"></td>
+
+                                <td>
+                                    <span th:text="${borrow.status}"
+                                          th:class="${borrow.status == 'Gecikmiş' ? 'badge bg-danger' : 'badge bg-success'}">
+                                    </span>
+                                </td>
+
                             </tr>
                             </tbody>
                         </table>

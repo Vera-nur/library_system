@@ -36,7 +36,7 @@
 
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form th:action="@{/books}" th:object="${book}" method="post">
+                        <form th:action="@{/books/save}" th:object="${book}" method="post">
                             <div class="mb-3">
                                 <label class="form-label">Kitap Adı</label>
                                 <input type="text" class="form-control" th:field="*{bookName}" required>
