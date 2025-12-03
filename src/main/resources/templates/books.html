@@ -79,9 +79,16 @@
                                 <td th:text="${book.stock}"></td>
 
                                 <td>
-                                    <a th:href="@{'/borrows/book/' + ${book.bookId}}" class="btn btn-sm btn-success">
+                                    <a th:if="${book.stock > 0}"
+                                       th:href="@{'/borrows/book/' + ${book.bookId}}"
+                                       class="btn btn-sm btn-success">
                                         <i class="fas fa-hand-holding"></i> Ödünç Ver
                                     </a>
+
+                                    <button th:unless="${book.stock > 0}"
+                                            class="btn btn-sm btn-secondary" disabled>
+                                        <i class="fas fa-ban"></i> Stok Yok
+                                    </button>
                                     <form th:action="@{'/books/' + ${book.bookId} + '/delete'}" method="post"
                                           onsubmit="return confirm('Silmek istediğine emin misin?');" style="display:inline;">
                                         <button type="submit" class="btn btn-sm btn-danger">

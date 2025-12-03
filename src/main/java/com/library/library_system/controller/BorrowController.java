@@ -1,5 +1,7 @@
 package com.library.library_system.controller;
 
+import com.library.library_system.entity.Book;
+import com.library.library_system.repository.BookRepository;
 import com.library.library_system.repository.UserRepository;
 import com.library.library_system.service.BorrowService;
 import lombok.RequiredArgsConstructor;
@@ -14,14 +16,25 @@ public class BorrowController {
 
     private final BorrowService borrowService;
     private final UserRepository userRepository; // Kullanıcı seçtirmek için lazım
+    private final BookRepository bookRepository;
 
     // 1. ADIM: Kitap Listesinden "Ödünç Ver"e basınca burası açılır.
     // Kullanıcı seçme ekranını gösterir.
     @GetMapping("/book/{bookId}")
     public String showBorrowForm(@PathVariable Integer bookId, Model model) {
+
+        // 1. Kitabı bul
+        Book book = bookRepository.findById(bookId).orElse(null);
+
+        // 2. Kitap yoksa veya STOK SIFIRSA, sayfayı açma, listeye geri at
+        if (book == null || book.getStock() <= 0) {
+            return "redirect:/books?error=StokYetersiz";
+        }
+
+        // Her şey yolundaysa formu aç
         model.addAttribute("bookId", bookId);
-        model.addAttribute("users", userRepository.findAll()); // Dropdown için kullanıcıları gönder
-        return "borrow-form"; // borrow-form.html dosyasını açar
+        model.addAttribute("users", userRepository.findAll());
+        return "borrow-form";
     }
 
     // 2. ADIM: Form doldurulup "Onayla" denince burası çalışır.
