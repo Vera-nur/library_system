@@ -5,23 +5,89 @@
     <title>Kütüphane Sistemi - Rol Seçimi</title>
     <link href="/css/styles.css" rel="stylesheet"/>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            background-image: url('/assets/img/library_b.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .page-title {
+            margin-top: 60px;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+        }
+
+        .page-subtitle {
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.80);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            height: 100%;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .btn-black {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+        }
+
+        .btn-black:hover {
+            background-color: #222;
+            color: #fff;
+        }
+
+        /* Navbar tamamen şeffaf olsun */
+.navbar {
+    background-color: transparent !important;
+    box-shadow: none !important;  /* gölgeyi de kaldırır */
+}
+
+/* Navbar içindeki yazı beyaz görünsün */
+.navbar-brand {
+    color: white !important;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+    </style>
 </head>
+
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <a class="navbar-brand ps-3" th:href="@{/}">Kütüphane Sistemi</a>
 </nav>
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Kütüphane Sistemi</h2>
-    <p class="text-center mb-5">Lütfen rolünüzü seçin.</p>
+<div class="container text-center">
+
+    <h2 class="page-title mb-3">Kütüphane Sistemi</h2>
+    <p class="page-subtitle mb-5">Lütfen rolünüzü seçin.</p>
 
     <div class="row justify-content-center">
+
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
                 <div class="card-body text-center">
                     <h4>Kullanıcı Girişi</h4>
                     <p>Fiziksel kitap ödünç alan üyeler.</p>
-                    <a class="btn btn-success"
+                    <a class="btn btn-black"
                        th:href="@{/login(system='library', role='user')}">
                         Kullanıcı Girişi
                     </a>
@@ -34,13 +100,14 @@
                 <div class="card-body text-center">
                     <h4>Çalışan Girişi</h4>
                     <p>Kütüphane görevlisi / çalışanlar.</p>
-                    <a class="btn btn-secondary"
+                    <a class="btn btn-black"
                        th:href="@{/login(system='library', role='worker')}">
                         Çalışan Girişi
                     </a>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 

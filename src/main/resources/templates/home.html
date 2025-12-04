@@ -6,10 +6,64 @@
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-</head>
-<body class="sb-nav-fixed bg-light">
 
-<nav class="navbar navbar-dark bg-dark">
+    <!-- 🔥 ARKA PLAN + NAVBAR STİLİ -->
+    <style>
+        body {
+            background-image: url('/assets/img/library_b.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* Navbar tamamen şeffaf olsun */
+        .navbar {
+            background-color: transparent !important;
+            box-shadow: none;
+        }
+
+        .navbar-brand {
+            color: #ffffff !important;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            font-weight: 600;
+        }
+
+        /* Kartların görünürlüğü için saydam beyaz arka plan + blur */
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+        }
+    </style>
+
+    <style>
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            height: 100%;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* üst yazılar ve buton arası boşluk sabit */
+            height: 100%;
+            padding-bottom: 30px; /* butonun konumu dengeli görünsün */
+        }
+
+        .card-body a.btn {
+            align-self: center; /* butonu ortalar */
+        }
+    </style>
+
+</head>
+
+<body class="sb-nav-fixed">
+
+<nav class="navbar navbar-dark">
     <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">Kütüphane Sistemi</span>
     </div>
@@ -18,8 +72,8 @@
 <div class="container mt-5">
     <div class="row justify-content-center mb-4">
         <div class="col-md-8 text-center">
-            <h1>Hoş geldiniz</h1>
-            <p class="lead">
+            <h1 style="color: white;">Hoş geldiniz</h1>
+            <p class="lead" style="color: white;">
                 Lütfen giriş yapmak istediğiniz sistemi seçin.
             </p>
         </div>
@@ -34,8 +88,8 @@
                     <p class="card-text">
                         E-kitaplara erişim, dijital okuma ve erişim logları.
                     </p>
-                    <!-- Dijital sistem butonu -->
                     <a class="btn btn-primary btn-lg"
+                       style="background-color: black; color: white; border-color: black;"
                        th:href="@{/digital/select-role}">
                         Dijital Sisteme Giriş
                     </a>
@@ -51,8 +105,8 @@
                     <p class="card-text">
                         Fiziksel kitap ödünç verme, iade, rezervasyon ve cezalar.
                     </p>
-                    <!-- Kütüphane sistem butonu -->
                     <a class="btn btn-success btn-lg"
+                       style="background-color: black; color: white; border-color: black;"
                        th:href="@{/library/select-role}">
                         Kütüphane Sistemine Giriş
                     </a>

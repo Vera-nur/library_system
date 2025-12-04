@@ -6,50 +6,96 @@
     <link href="/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
             crossorigin="anonymous"></script>
+
+    <style>
+        /* Arka plan resmi */
+        body.login-bg {
+            background-image: url('/assets/img/library_b.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* Tüm sayfayı ortalamak için */
+        #layoutAuthentication {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Kartı saran wrapper – her ekranda ortada */
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 1.5rem;
+        }
+
+        /* Kart tasarımı – cam efekti + max genişlik */
+        .login-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.25);
+            max-width: 420px;
+            width: 100%;
+        }
+
+        /* Giriş butonunu siyah yapalım */
+        .btn-primary {
+            background-color: #000 !important;
+            border-color: #000 !important;
+            color: #fff !important;
+        }
+
+        .card-footer .small {
+            color: #333;
+        }
+    </style>
 </head>
-<body class="bg-primary">
+<body class="login-bg">
 <div id="layoutAuthentication">
     <div id="layoutAuthentication_content">
         <main>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-5">
-                        <div class="card shadow-lg border-0 rounded-lg mt-5">
-                            <div class="card-header">
-                                <h3 class="text-center font-weight-light my-4"
-                                    th:text="${loginTitle}">Giriş</h3>
+            <div class="login-wrapper">
+                <div class="card login-card">
+                    <div class="card-header">
+                        <h3 class="text-center font-weight-light my-4"
+                            th:text="${loginTitle}">Giriş</h3>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/login}" method="post">
+                            <!-- sistem ve rol bilgilerini gizli taşıyoruz -->
+                            <input type="hidden" name="system" th:value="${system}" />
+                            <input type="hidden" name="role" th:value="${role}" />
+
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="loginId"
+                                       name="loginId" type="number" placeholder="ID" />
+                                <label for="loginId" th:text="${idLabel}">ID</label>
                             </div>
-                            <div class="card-body">
-                                <form th:action="@{/login}" method="post">
-                                    <!-- sistem ve rol bilgilerini gizli taşıyoruz -->
-                                    <input type="hidden" name="system" th:value="${system}" />
-                                    <input type="hidden" name="role" th:value="${role}" />
 
-                                    <div class="form-floating mb-3">
-                                        <input class="form-control" id="loginId"
-                                               name="loginId" type="number" placeholder="ID" />
-                                        <label for="loginId" th:text="${idLabel}">ID</label>
-                                    </div>
-
-                                    <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputPassword"
-                                               name="password" type="password" placeholder="Şifre" />
-                                        <label for="inputPassword">Şifre</label>
-                                    </div>
-
-                                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-
-                                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                        <a class="small" th:href="@{/}">Sistem Seçimine Dön</a>
-                                        <button class="btn btn-primary" type="submit">Giriş Yap</button>
-                                    </div>
-                                </form>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="inputPassword"
+                                       name="password" type="password" placeholder="Şifre" />
+                                <label for="inputPassword">Şifre</label>
                             </div>
-                            <div class="card-footer text-center py-3">
-                                <div class="small">
-                                    Kayıt işlemleri şimdilik sistem yöneticisi tarafından yapılmaktadır.
-                                </div>
+
+                            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                            <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                <a class="small" th:href="@{/}">Sistem Seçimine Dön</a>
+                                <button class="btn btn-primary" type="submit">Giriş Yap</button>
                             </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <div class="small">
+                            Kayıt işlemleri şimdilik sistem yöneticisi tarafından yapılmaktadır.
                         </div>
                     </div>
                 </div>
