@@ -1,7 +1,9 @@
 package com.library.library_system.controller;
 
+import com.library.library_system.entity.Person;
 import com.library.library_system.entity.User;
 import com.library.library_system.entity.Worker;
+import com.library.library_system.repository.PersonRepository;
 import com.library.library_system.repository.UserRepository;
 import com.library.library_system.repository.WorkerRepository;
 import org.springframework.stereotype.Controller;
@@ -13,16 +15,19 @@ import java.util.Optional;
 @Controller
 public class LoginController {
 
+    private final PersonRepository personRepository;
     private final UserRepository userRepository;
     private final WorkerRepository workerRepository;
 
-    public LoginController(UserRepository userRepository,
+    public LoginController(PersonRepository personRepository,
+                           UserRepository userRepository,
                            WorkerRepository workerRepository) {
+        this.personRepository = personRepository;
         this.userRepository = userRepository;
         this.workerRepository = workerRepository;
     }
 
-    // Rol seçim sayfalarından gelen GET -> login formunu göster
+    // GET /login -> formu gösteriyor
     @GetMapping("/login")
     public String showLogin(@RequestParam String system,
                             @RequestParam String role,
@@ -33,85 +38,84 @@ public class LoginController {
 
         String systemText = "digital".equals(system) ? "Dijital Sistem" : "Kütüphane Sistemi";
         String roleText = "worker".equals(role) ? "Çalışan Girişi" : "Kullanıcı Girişi";
-        String idLabel = "worker".equals(role) ? "Çalışan ID" : "Kullanıcı ID";
 
         model.addAttribute("loginTitle", systemText + " - " + roleText);
-        model.addAttribute("idLabel", idLabel);
 
         return "login";
     }
 
-    // Form POST -> giriş kontrolü
+    // POST /login -> email + şifre ile giriş
     @PostMapping("/login")
     public String handleLogin(@RequestParam String system,
-                              @RequestParam String role,
-                              @RequestParam("loginId") Integer loginId,
+                              @RequestParam String role,   // user / worker (ekrandan seçilen)
+                              @RequestParam String email,
                               @RequestParam String password,
                               Model model) {
 
-        if ("user".equals(role)) {
-            return handleUserLogin(system, loginId, password, model);
-        } else if ("worker".equals(role)) {
-            return handleWorkerLogin(system, loginId, password, model);
-        } else {
-            model.addAttribute("error", "Geçersiz rol.");
+        System.out.println(">> LOGIN TRY email=" + email + " role=" + role + " system=" + system);
+
+        // 1) Email'e göre person bul
+        Optional<Person> optPerson = personRepository.findByEmail(email);
+
+        if (optPerson.isEmpty()) {
+            model.addAttribute("error", "Bu e-posta ile kayıtlı kişi bulunamadı.");
             return showLogin(system, role, model);
         }
-    }
 
-    // --- User login ---
-    private String handleUserLogin(String system, Integer userId,
-                                   String password, Model model) {
+        Person person = optPerson.get();
+        System.out.println("DB password=" + person.getPassword());
 
-        Optional<User> optUser = userRepository.findById(userId);
-
-        if (optUser.isEmpty()) {
-            model.addAttribute("error", "Kullanıcı ID bulunamadı.");
-            model.addAttribute("role", "user");
-            model.addAttribute("system", system);
-            return showLogin(system, "user", model);
-        }
-
-        User user = optUser.get();
-
-        if (!user.getPerson().getPassword().equals(password)) {
+        // 2) Şifre kontrolü
+        if (!person.getPassword().equals(password)) {
             model.addAttribute("error", "Şifre hatalı.");
-            model.addAttribute("role", "user");
-            model.addAttribute("system", system);
-            return showLogin(system, "user", model);
+            return showLogin(system, role, model);
         }
 
-        // TODO: burada session'a user bilgisini koyabilirsin (ileride)
-        return "digital".equals(system)
-                ? "redirect:/digital/dashboard"
-                : "redirect:/library/dashboard";
-    }
+        // 3) Person type kontrolü (USER / WORKER)
+        String personType = person.getPersonType(); // USER / WORKER
+        System.out.println("personType = " + personType);
 
-    // --- Worker login ---
-    private String handleWorkerLogin(String system, Integer workerId,
-                                     String password, Model model) {
+        if ("USER".equalsIgnoreCase(personType)) {
 
-        Optional<Worker> optWorker = workerRepository.findById(workerId);
+            if (!"user".equals(role)) {
+                model.addAttribute("error",
+                        "Bu hesap kullanıcı hesabı. Lütfen kullanıcı girişi ekranını kullanın.");
+                return showLogin(system, role, model);
+            }
 
-        if (optWorker.isEmpty()) {
-            model.addAttribute("error", "Çalışan ID bulunamadı.");
-            model.addAttribute("role", "worker");
-            model.addAttribute("system", system);
-            return showLogin(system, "worker", model);
+            Optional<User> optUser = userRepository.findByPerson(person);
+            if (optUser.isEmpty()) {
+                model.addAttribute("error", "Bu kişi için kullanıcı kaydı bulunamadı.");
+                return showLogin(system, role, model);
+            }
+
+            // TODO: Session'a user koy
+            return "digital".equals(system)
+                    ? "redirect:/digital/dashboard"
+                    : "redirect:/library/dashboard";
+
+        } else if ("WORKER".equalsIgnoreCase(personType)) {
+
+            if (!"worker".equals(role)) {
+                model.addAttribute("error",
+                        "Bu hesap çalışan hesabı. Lütfen çalışan girişi ekranını kullanın.");
+                return showLogin(system, role, model);
+            }
+
+            Optional<Worker> optWorker = workerRepository.findByPerson(person);
+            if (optWorker.isEmpty()) {
+                model.addAttribute("error", "Bu kişi için çalışan kaydı bulunamadı.");
+                return showLogin(system, role, model);
+            }
+
+            // TODO: Session'a worker koy
+            return "digital".equals(system)
+                    ? "redirect:/digital/dashboard"
+                    : "redirect:/library/dashboard";
+
+        } else {
+            model.addAttribute("error", "Bu kişinin tipi (person_type) geçersiz: " + personType);
+            return showLogin(system, role, model);
         }
-
-        Worker worker = optWorker.get();
-
-        if (!worker.getPerson().getPassword().equals(password)) {
-            model.addAttribute("error", "Şifre hatalı.");
-            model.addAttribute("role", "worker");
-            model.addAttribute("system", system);
-            return showLogin(system, "worker", model);
-        }
-
-        // TODO: burada session'a worker bilgisini koyabilirsin (ileride)
-        return "digital".equals(system)
-                ? "redirect:/digital/dashboard"
-                : "redirect:/library/dashboard";
     }
 }
