@@ -74,14 +74,14 @@
                             <input type="hidden" name="role" th:value="${role}" />
 
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="loginId"
-                                       name="loginId" type="number" placeholder="ID" />
-                                <label for="loginId" th:text="${idLabel}">ID</label>
+                                <input class="form-control" id="inputEmail"
+                                       name="email" type="email" placeholder="E-posta" required />
+                                <label for="inputEmail">E-posta</label>
                             </div>
 
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="inputPassword"
-                                       name="password" type="password" placeholder="Şifre" />
+                                       name="password" type="password" placeholder="Şifre" required />
                                 <label for="inputPassword">Şifre</label>
                             </div>
 
