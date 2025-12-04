@@ -6,21 +6,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
 
+    // 1) İlk ekran: sistem seçimi (home.html)
+    @GetMapping("/")
+    public String home() {
+        return "home";   // home.html
+    }
 
-    //Bu kısım için homecontroller kısmını ekledim
-    //@GetMapping("/")
-    //public String index() {
-       // return "index"; // templates/index.html
-    //}
+    // 2) Dijital sistem için rol seçimi sayfası
+    @GetMapping("/digital/select-role")
+    public String digitalSelectRole() {
+        return "digital-select-role";   // digital-select-role.html
+    }
 
+    // 3) Kütüphane sistemi için rol seçimi sayfası
+    @GetMapping("/library/select-role")
+    public String librarySelectRole() {
+        return "library-select-role";   // library-select-role.html
+    }
+
+    // Bunlar opsiyonel, eskisi gibi durabilir
     @GetMapping("/layout-static")
     public String layoutStatic() {
         return "layout-static";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
     }
 
     @GetMapping("/register")

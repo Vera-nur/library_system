@@ -18,8 +18,14 @@ public class Person {
     private String surname;
 
     private String tel;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false)
     private String password;
 
     @Column(name = "person_type")

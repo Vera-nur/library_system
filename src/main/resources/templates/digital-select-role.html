@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dijital Kitap Sistemi - Rol Seçimi</title>
+    <link href="/css/styles.css" rel="stylesheet"/>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand ps-3" th:href="@{/}">Kütüphane Sistemi</a>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Dijital Kitap Sistemi</h2>
+    <p class="text-center mb-5">Lütfen rolünüzü seçin.</p>
+
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h4>Kullanıcı Girişi</h4>
+                    <p>E-kitaplara erişen normal kullanıcılar.</p>
+                    <a class="btn btn-primary"
+                       th:href="@{/login(system='digital', role='user')}">
+                        Kullanıcı Girişi
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h4>Çalışan Girişi</h4>
+                    <p>Dijital sistemde görevli çalışanlar.</p>
+                    <a class="btn btn-secondary"
+                       th:href="@{/login(system='digital', role='worker')}">
+                        Çalışan Girişi
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/js/scripts.js"></script>
+</body>
+</html>

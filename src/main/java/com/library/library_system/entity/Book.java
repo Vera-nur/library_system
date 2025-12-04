@@ -40,11 +40,6 @@ public class Book {
     @JoinColumn(name = "edition_id")
     private BookEdition edition;
 
-    // Fiziksel / Dijital; ParameterDef: BOOK_TYPE
-    @ManyToOne
-    @JoinColumn(name = "book_type_id")
-    private Parameter bookType;
-
     // Rafta / ödünç / rezerve; ParameterDef: BOOK_STATUS
     @ManyToOne
     @JoinColumn(name = "status_id")

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Kütüphane Sistemi - Giriş</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed bg-light">
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Kütüphane Sistemi</span>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8 text-center">
+            <h1>Hoş geldiniz</h1>
+            <p class="lead">
+                Lütfen giriş yapmak istediğiniz sistemi seçin.
+            </p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Dijital Kitap Sistemi -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-body text-center">
+                    <h3 class="card-title mb-3">Dijital Kitap Sistemi</h3>
+                    <p class="card-text">
+                        E-kitaplara erişim, dijital okuma ve erişim logları.
+                    </p>
+                    <!-- Dijital sistem butonu -->
+                    <a class="btn btn-primary btn-lg"
+                       th:href="@{/digital/select-role}">
+                        Dijital Sisteme Giriş
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kütüphane (Fiziksel) Sistemi -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <div class="card-body text-center">
+                    <h3 class="card-title mb-3">Kütüphane Sistemi</h3>
+                    <p class="card-text">
+                        Fiziksel kitap ödünç verme, iade, rezervasyon ve cezalar.
+                    </p>
+                    <!-- Kütüphane sistem butonu -->
+                    <a class="btn btn-success btn-lg"
+                       th:href="@{/library/select-role}">
+                        Kütüphane Sistemine Giriş
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/js/scripts.js"></script>
+</body>
+</html>

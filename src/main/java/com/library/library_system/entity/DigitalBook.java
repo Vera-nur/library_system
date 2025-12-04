@@ -13,14 +13,28 @@ public class DigitalBook {
     @Column(name = "digital_book_id")
     private Integer digitalBookId;
 
-    // Her dijital kitap bir fiziksel kitaba bağlıdır
-    @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
-
     @Column(name = "file_format", nullable = false)
     private String fileFormat;   // pdf, epub, mobi...
 
     @Column(name = "page_count")
     private Integer pageCount;
+
+    @Column(name = "digital_book_name", nullable = false)
+    private String bookName;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+    @ManyToOne
+    @JoinColumn(name = "language_id")
+    private BookLanguage language;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 }
