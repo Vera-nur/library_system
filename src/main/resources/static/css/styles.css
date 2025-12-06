@@ -145,33 +145,6 @@ h3, .h3 {
     font-size: 1.75rem;
   }
 }
-.sb-sidenav-toggled #layoutSidenav_nav {
-    margin-left: 0 !important;
-}
-
-#layoutSidenav_nav {
-    margin-left: -240px;
-    transition: margin .3s;
-}
-
-.sb-sidenav {
-    width: 240px;
-}
-/* ▬▬▬ SIDEBAR TOGGLE STYLES ▬▬▬ */
-#layoutSidenav_nav {
-    width: 240px;
-    transform: translateX(-240px);
-    transition: transform 0.25s ease-in-out;
-}
-
-.sb-sidenav-toggled #layoutSidenav_nav {
-    transform: translateX(0);
-}
-
-.sb-sidenav-toggled #layoutSidenav_content {
-    margin-left: 240px;
-    transition: margin-left 0.25s ease-in-out;
-}
 
 h4, .h4 {
   font-size: calc(1.275rem + 0.3vw);
