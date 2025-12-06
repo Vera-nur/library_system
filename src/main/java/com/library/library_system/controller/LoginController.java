@@ -45,6 +45,15 @@ public class LoginController {
         return "login";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        // 1. Oturumu komple temizle (İsim, ID, her şey silinir)
+        session.invalidate();
+
+        // 2. Ana sayfaya yönlendir (home.html)
+        return "redirect:/home";
+    }
+
     // POST /login -> email + şifre ile giriş
     @PostMapping("/login")
     public String handleLogin(@RequestParam String system,

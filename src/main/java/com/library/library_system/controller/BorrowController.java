@@ -61,7 +61,7 @@ public class BorrowController {
     public String listBorrowedBooks(Model model) {
 
         // Sadece ödünçte (status = "Ödünçte") olan kayıtları getir
-        List<BorrowDetailsView> borrows = borrowViewRepository.findByStatus("Ödünçte");
+        List<BorrowDetailsView> borrows = borrowViewRepository.findAll();
 
         model.addAttribute("borrows", borrows);
         return "borrow-list"; // HTML sayfası

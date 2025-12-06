@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Immutable;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -30,4 +31,7 @@ public class BorrowDetailsView {
 
     @Column(name = "status_label")
     private String status;
+
+    @Column(name = "estimated_fine")
+    private BigDecimal estimatedFine;
 }

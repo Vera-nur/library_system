@@ -23,7 +23,7 @@ public class WorkerController {
 
     // 📌 1) Yeni Çalışan Ekleme Formu
     @GetMapping("/newWorker")
-    public String showNewWorkerForm(Model model) {
+    public String showNewWorkerForm(@RequestParam(required = false, defaultValue = "library") String system, Model model) {
 
         Worker worker = new Worker();
 
@@ -32,13 +32,14 @@ public class WorkerController {
         worker.setPerson(p);
 
         model.addAttribute("worker", worker);
+        model.addAttribute("systemSource", system);
         return "newWorker";
     }
 
 
     // 📌 2) Çalışanı Kaydetme
     @PostMapping("/save")
-    public String saveWorker(@ModelAttribute("worker") Worker worker) {
+    public String saveWorker(@ModelAttribute("worker") Worker worker, @RequestParam("systemSource") String systemSource) {
 
         // Person'ı önce kaydediyoruz
         Person person = worker.getPerson();
@@ -48,7 +49,11 @@ public class WorkerController {
         worker.setPerson(savedPerson);
         workerRepository.save(worker);
 
-        return "redirect:/digital/worker/home"; // istersen /workers/list yaparız
+        if ("digital".equals(systemSource)) {
+            return "redirect:/digital/worker/home";
+        } else {
+            return "redirect:/library/worker/home";
+        } // istersen /workers/list yaparız
     }
 
 

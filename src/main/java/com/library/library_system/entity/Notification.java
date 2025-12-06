@@ -20,6 +20,9 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "is_read")
+    private Boolean isRead = false;
+
     @Column(name = "notification_text", nullable = false, length = 500)
     private String notificationText;
 

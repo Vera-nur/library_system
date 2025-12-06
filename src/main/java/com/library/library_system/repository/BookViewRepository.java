@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookViewRepository extends JpaRepository<BookDetailsView, Integer> {
     // Hazır! findAll() metodu zaten içinde var.
+
 }

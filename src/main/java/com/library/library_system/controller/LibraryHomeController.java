@@ -1,5 +1,9 @@
 package com.library.library_system.controller;
 
+import com.library.library_system.entity.Notification;
+import com.library.library_system.entity.ReservationView;
+import com.library.library_system.repository.NotificationRepository;
+import com.library.library_system.repository.ReservationViewRepository;
 import com.library.library_system.service.BookService;
 import com.library.library_system.service.BorrowService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.List;
 
 
 @Controller
@@ -18,8 +23,9 @@ import java.util.Collections;
 public class LibraryHomeController {
 
     private final BookService bookService;
-    // ileride BorrowService, ReservationService vs de ekleyeceğiz
     private final BorrowService borrowService; // ✨ EKLENDİ
+    private final NotificationRepository notificationRepository;
+    private final ReservationViewRepository reservationViewRepository;
 
     // USER HOME
     @GetMapping("/user/home")
@@ -36,6 +42,13 @@ public class LibraryHomeController {
         // Üstteki "Ödünç Aldığım Kitaplar" tablosu
         model.addAttribute("borrowList", borrowService.getBorrowsForUser(fullName));
 
+        List<Notification> bildirimler = notificationRepository
+                .findByUser_UserIdAndIsReadFalseOrderByCreatedAtDesc(userId);
+        model.addAttribute("notifications", bildirimler);
+
+        List<ReservationView> myReservations = reservationViewRepository.findByUserIdOrderByCreatedAtDesc(userId);
+        model.addAttribute("myReservations", myReservations);
+
         return "library-user-home";
     }
 
@@ -43,6 +56,9 @@ public class LibraryHomeController {
     @GetMapping("/worker/home")
     public String workerHome(HttpSession session, Model model) {
         Integer workerId = (Integer) session.getAttribute("workerId");
+        String fullName = (String) session.getAttribute("fullName");
+        if (fullName == null) fullName = "Librarian";
+        model.addAttribute("currentUser", fullName);
         if (workerId == null) {
             return "redirect:/login?system=library&role=worker";
         }

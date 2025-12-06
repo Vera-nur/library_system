@@ -35,6 +35,11 @@ public class PageController {
         return "register";
     }
 
+    @GetMapping("/home")
+    public String showHomePage() {
+        return "home"; // templates klasöründeki home.html dosyasını açar
+    }
+
     @GetMapping("/password")
     public String password() {
         return "password";

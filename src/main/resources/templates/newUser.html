@@ -91,6 +91,7 @@
             </div>
             <!-- Eğer tamamen gizlemek istersen üsttekini kaldırıp:
                  <input type="hidden" th:field="*{person.personType}" /> kullanabilirsin. -->
+            <input type="hidden" name="systemSource" th:value="${systemSource}" />
 
             <button type="submit" class="btn btn-dark mt-3">Save</button>
         </form>

@@ -30,7 +30,7 @@ public class UserController {
 
     // ➕ NEW USER FORM
     @GetMapping("/newUser")
-    public String showNewUserForm(Model model) {
+    public String showNewUserForm(@RequestParam(required = false, defaultValue = "library") String system, Model model) {
 
         User user = new User();
 
@@ -39,12 +39,13 @@ public class UserController {
         user.setPerson(p);
 
         model.addAttribute("user", user);
+        model.addAttribute("systemSource", system);
         return "newUser";
     }
 
     // 💾 KAYDET
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") User user) {
+    public String saveUser(@ModelAttribute("user") User user, @RequestParam("systemSource") String systemSource) {
 
         // 1) önce Person kaydet
         Person person = user.getPerson();
@@ -57,7 +58,11 @@ public class UserController {
         userRepository.save(user);
 
         // sonra ister /library/user/home, ister /digital/user/home'a çevirirsin
-        return "redirect:/digital/worker/home";
+        if ("digital".equals(systemSource)) {
+            return "redirect:/digital/worker/home";
+        } else {
+            return "redirect:/library/worker/home";
+        }
     }
 
     // ✏ EDIT (bonus)

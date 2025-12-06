@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByPerson(Person person);
 
+    User findByPerson_Email(String email);
     // İçine bir şey yazmana gerek yok.
     // JpaRepository sayesinde findAll(), findById() gibi metodlar otomatik geliyor.
 }

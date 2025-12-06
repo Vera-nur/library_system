@@ -1,37 +1,91 @@
-<!--library-user-home.html -->
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
-    <title>Kütüphane - Kullanıcı Paneli</title>
+    <title>Library - User Panel</title>
     <link href="/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body class="sb-nav-fixed">
 
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand ps-3" th:href="@{/library/user/home}">Kütüphane</a>
+    <a class="navbar-brand ps-3" th:href="@{/library/user/home}">Library System</a>
+
+    <ul class="navbar-nav ms-auto me-3 me-lg-4">
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdownNotif" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-bell fa-fw"></i>
+                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle"
+                      style="font-size: 0.6rem;"
+                      th:if="${notifications != null and !notifications.isEmpty()}"
+                      th:text="${notifications.size()}">
+                </span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="navbarDropdownNotif" style="min-width: 320px;">
+                <li><h6 class="dropdown-header d-flex justify-content-between align-items-center">
+                    Your Notifications
+                    <a th:if="${!notifications.isEmpty()}" th:href="@{/library/notifications/mark-all-read}" class="text-decoration-none small text-primary" style="cursor: pointer;">Mark all read</a>
+                </h6></li>
+                <li th:each="notif : ${notifications}">
+                    <div class="d-flex align-items-start px-3 py-2 border-bottom">
+                        <div class="me-3 mt-1 text-warning"><i class="fas fa-exclamation-circle"></i></div>
+                        <div class="flex-grow-1">
+                            <div class="small text-dark fw-bold" th:text="${notif.notificationText}">Message</div>
+                            <div class="small text-muted" style="font-size: 0.75rem;" th:text="${notif.createdAt}">Date</div>
+                        </div>
+                        <div class="ms-2">
+                            <a th:href="@{/library/notifications/mark-read/{id}(id=${notif.notificationId})}" class="btn btn-sm btn-light text-success" title="Mark as read"><i class="fas fa-check"></i></a>
+                        </div>
+                    </div>
+                </li>
+                <li th:if="${notifications == null or notifications.isEmpty()}">
+                    <a class="dropdown-item text-center text-muted small py-3"><i class="fas fa-check-circle mb-1"></i><br>No new notifications.</a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item text-center small text-primary fw-bold py-2" th:href="@{/library/notifications/history}">View All History <i class="fas fa-arrow-right ms-1"></i></a></li>
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown ms-2">
+            <a class="nav-link dropdown-toggle" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUser">
+                <li><a class="dropdown-item" href="#!">Profile Settings</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </li>
+    </ul>
 </nav>
 
 <div id="layoutSidenav">
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4 mt-4">
-                <h1 class="mb-4">Kütüphane Kullanıcı Paneli</h1>
 
-                <!-- Ödünç aldığım kitaplar -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-1"></i> <span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-1"></i> <span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <h1 class="mb-4">User Dashboard</h1>
+
                 <div class="card mb-4">
                     <div class="card-header">
-                        <i class="fas fa-book me-1"></i> Ödünç Aldığım Kitaplar
+                        <i class="fas fa-book me-1"></i> My Borrowed Books
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Kitap</th>
-                                <th>Alış Tarihi</th>
-                                <th>İade Tarihi</th>
-                                <th>Durum</th>
+                                <th>Book Title</th>
+                                <th>Start Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -39,30 +93,83 @@
                                 <td th:text="${borrow.bookName}"></td>
                                 <td th:text="${borrow.startDate}"></td>
                                 <td th:text="${borrow.endDate}"></td>
-                                <td th:text="${borrow.status}"></td>
+                                <td>
+                                    <span th:text="${borrow.status == 'Gecikmis' ? 'Overdue' : 'Borrowed'}"
+                                          th:class="${borrow.status == 'Gecikmis'} ? 'badge bg-danger' : 'badge bg-success'">
+                                    </span>
+                                </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(borrowList)}">
-                                <td colspan="4" class="text-center">Şu anda ödünç aldığın kitap yok.</td>
+                                <td colspan="4" class="text-center text-muted">You have not borrowed any books yet.</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Tüm kitaplar (sadece görüntüleme ve “rezerve et” butonu ileride gelecek) -->
-                <div class="card mb-4">
+                <div class="card mb-4" th:if="${myReservations != null and !myReservations.isEmpty()}">
                     <div class="card-header">
-                        <i class="fas fa-list me-1"></i> Tüm Kitaplar
+                        <i class="fas fa-bookmark me-1 text-primary"></i> My Reservations
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered">
+                        <table class="table table-hover align-middle">
                             <thead>
                             <tr>
-                                <th>Kitap</th>
-                                <th>Yazar</th>
-                                <th>Kategori</th>
-                                <th>Stok</th>
-                                <th>İşlemler</th>
+                                <th>Book</th>
+                                <th>Type (Description)</th>
+                                <th>Request Date</th>
+                                <th>Expires On</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="res : ${myReservations}">
+                                <td class="fw-bold" th:text="${res.bookName}">Book Name</td>
+
+                                <td>
+                                    <span th:text="${res.typeDesc}"
+                                          th:class="${res.typeCode == 'HOLD'} ? 'badge bg-success' : 'badge bg-warning text-dark'">
+                                    </span>
+                                </td>
+
+                                <td th:text="${#temporals.format(res.createdAt, 'yyyy-MM-dd')}">Date</td>
+                                <td th:text="${res.expirationDate != null} ? ${#temporals.format(res.expirationDate, 'yyyy-MM-dd')} : '-'"></td>
+
+                                <td>
+                                    <span th:if="${res.typeCode == 'HOLD' and res.statusCode == 'RES_ACTIVE'}"
+                                          class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i> Ready for Pickup
+                                    </span>
+
+                                    <span th:if="${res.typeCode == 'WAITLIST' and res.statusCode == 'RES_ACTIVE'}"
+                                          class="badge bg-warning text-dark">
+                                        <i class="fas fa-hourglass-half me-1"></i> In Queue
+                                    </span>
+
+                                    <span th:if="${!(res.typeCode == 'HOLD' and res.statusCode == 'RES_ACTIVE') and !(res.typeCode == 'WAITLIST' and res.statusCode == 'RES_ACTIVE')}"
+                                          class="badge bg-secondary"
+                                          th:text="${res.statusDesc}">
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-list me-1"></i> All Books
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered align-middle">
+                            <thead>
+                            <tr>
+                                <th>Book</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Stock</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -70,16 +177,31 @@
                                 <td th:text="${book.bookName}"></td>
                                 <td th:text="${book.authorName}"></td>
                                 <td th:text="${book.categoryName}"></td>
-                                <td th:text="${book.stock}"></td>
+
+                                <td th:text="${book.stock}"
+                                    th:classappend="${book.stock == 0} ? 'text-danger fw-bold' : ''">
+                                </td>
+
                                 <td>
-                                    <!-- SONRA: Rezerve Et / İptal Et butonları -->
-                                    <button class="btn btn-sm btn-outline-primary" disabled>
-                                        Rezerve Et (yakında)
-                                    </button>
+                                    <form th:action="@{/library/reservation/create}" method="post">
+                                        <input type="hidden" name="bookId" th:value="${book.bookId}" />
+
+                                        <button th:if="${book.stock > 0}" type="submit"
+                                                class="btn btn-sm btn-outline-success"
+                                                onclick="return confirm('Do you want to hold this book for 3 days?');">
+                                            <i class="fas fa-bookmark me-1"></i> Reserve (Hold)
+                                        </button>
+
+                                        <button th:if="${book.stock == 0}" type="submit"
+                                                class="btn btn-sm btn-outline-warning text-dark"
+                                                onclick="return confirm('Stock is empty. Do you want to join the waitlist?');">
+                                            <i class="fas fa-clock me-1"></i> Join Waitlist
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(books)}">
-                                <td colspan="5" class="text-center">Kayıtlı kitap bulunamadı.</td>
+                                <td colspan="5" class="text-center text-muted">No books found in the library.</td>
                             </tr>
                             </tbody>
                         </table>
@@ -92,7 +214,7 @@
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Kütüphane Sistemi 2025</div>
+                    <div class="text-muted">Copyright &copy; Library System 2025</div>
                 </div>
             </div>
         </footer>

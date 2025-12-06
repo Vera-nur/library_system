@@ -53,26 +53,21 @@
 <body class="sb-nav-fixed">
 
 <!-- TOP NAVBAR -->
-<nav class="sb-topnav navbar navbar-expand navbar-dark">
-    <a class="navbar-brand ps-3" th:href="@{/library/worker/home}">Kütüphane Sistemi</a>
-
-    <div class="ms-auto me-3">
-        <div class="dropdown">
-            <button class="btn btn-outline-light dropdown-toggle"
-                    type="button"
-                    id="userMenuButton"
-                    data-bs-toggle="dropdown">
-                <span th:text="${loggedInName} ?: 'Kütüphane Görevlisi'">Kütüphane Görevlisi</span>
-            </button>
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand ps-3" th:href="@{/library/worker/home}">Library System</a>
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+        <i class="fas fa-bars"></i>
+    </button>
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">
+                <i class="fas fa-user fa-fw"></i>
+            </a>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                    <a class="dropdown-item" th:href="@{/logout}">
-                        <i class="fa-solid fa-right-from-bracket me-2"></i> Çıkış Yap
-                    </a>
-                </li>
+                <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
             </ul>
-        </div>
-    </div>
+        </li>
+    </ul>
 </nav>
 
 <div id="layoutSidenav">
@@ -80,32 +75,35 @@
     <!-- SOL MENÜ -->
     <div id="layoutSidenav_nav">
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-
             <div class="sb-sidenav-menu">
                 <div class="nav">
-
-                    <div class="sb-sidenav-menu-heading">GENEL</div>
-
+                    <div class="sb-sidenav-menu-heading">GENERAL</div>
                     <a class="nav-link" th:href="@{/library/worker/home}">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        Ana Panel
+                        Dashboard
                     </a>
 
-                    <div class="sb-sidenav-menu-heading">KÜTÜPHANE</div>
-
+                    <div class="sb-sidenav-menu-heading">LIBRARY</div>
                     <a class="nav-link" th:href="@{/books}">
                         <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
-                        Kitaplar
+                        Books
                     </a>
 
-                    <a class="nav-link active" th:href="@{/library/borrow/list}">
+                    <a class="nav-link active" th:href="@{/library/borrow/search}">
                         <div class="sb-nav-link-icon"><i class="fas fa-hand-holding"></i></div>
-                        Ödünç İşlemleri
+                        Borrowing
                     </a>
 
+                    <a class="nav-link" th:href="@{/library/fines/late-books}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        Overdue Books
+                    </a>
                 </div>
             </div>
-
+            <div class="sb-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                Librarian
+            </div>
         </nav>
     </div>
 
@@ -177,14 +175,15 @@
                                 <td>
                                     <span class="badge-status"
                                           th:text="${borrow.status}"
-                                          th:classappend="${borrow.status == 'Gecikmiş'} ? ' bg-danger text-white' : ' bg-success text-white'">
+                                          th:classappend="${borrow.status == 'Gecikmis'} ? ' bg-danger text-white' : ' bg-success text-white'">
                                         Ödünçte
                                     </span>
                                 </td>
 
                                 <td class="text-end">
-                                    <!-- Teslim Al butonu (POST) -->
-                                    <form th:action="@{/library/borrow/return/{id}(id=${borrow.borrowBookId})}"
+
+                                    <form th:if="${borrow.status == 'Ödünçte'}"
+                                          th:action="@{/library/borrow/return/{id}(id=${borrow.borrowBookId})}"
                                           method="post" class="d-inline">
                                         <button type="submit"
                                                 class="btn btn-sm btn-outline-primary"
@@ -193,6 +192,17 @@
                                             Teslim Al
                                         </button>
                                     </form>
+
+                                    <div th:if="${borrow.status == 'Gecikmis'}">
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            Ceza: <span th:text="${borrow.estimatedFine} + ' TL'"></span>
+                                        </span>
+                                        <a th:href="@{/library/fines/late-books}" class="btn btn-sm btn-danger mt-1">
+                                            Ödeme Ekranına Git
+                                        </a>
+                                    </div>
+
                                 </td>
                             </tr>
 
