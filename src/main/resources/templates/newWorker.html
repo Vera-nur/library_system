@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Worker</title>
+    <link href="/css/styles.css" rel="stylesheet"/>
+</head>
+
+<body>
+
+<div class="container mt-5">
+    <h2>Add / Edit Worker</h2>
+    <hr/>
+
+    <form th:action="@{/workers/save}" th:object="${worker}" method="post">
+
+        <!-- Hidden Worker ID -->
+        <input type="hidden" th:field="*{workerId}" />
+
+        <!-- PERSON FIELDS -->
+
+        <div class="mb-3">
+            <label>Name</label>
+            <input type="text" th:field="*{person.name}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label>Surname</label>
+            <input type="text" th:field="*{person.surname}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label>Telephone</label>
+            <input type="text" th:field="*{person.tel}" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" th:field="*{person.email}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label>Address</label>
+            <input type="text" th:field="*{person.address}" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label>Password</label>
+            <input type="text" th:field="*{person.password}" class="form-control" required />
+        </div>
+
+        <input type="text" th:field="*{person.personType}" value="worker"
+               class="form-control" readonly />
+
+
+        <button type="submit" class="btn btn-dark mt-3">Save Worker</button>
+    </form>
+</div>
+
+</body>
+</html>

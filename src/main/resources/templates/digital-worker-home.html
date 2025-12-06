@@ -8,11 +8,63 @@
             crossorigin="anonymous"></script>
 
     <style>
-
         body {
-            background: linear-gradient(135deg, #f3ede4, #e8e2da);
-            min-height: 100vh;
+            background: #f0ebe3;
             font-family: Arial, sans-serif;
+        }
+
+        /* === ÜST NAVBAR ve SOL SİDEBAR AYNI RENK === */
+        nav.navbar {
+            background-color: #111 !important;   /* aynı renk */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111;                    /* aynı renk */
+            color: white;
+            padding-top: 70px;                  /* navbar yüksekliği kadar boşluk */
+            z-index: 998;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 14px 20px;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .sidebar a:hover {
+            background: #333;
+            color: white;
+        }
+
+        .sidebar .active {
+            background: #005eff;
+            color: white !important;
+        }
+
+        .sidebar-title {
+            padding: 10px 20px;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #aaa;
+        }
+
+        /* === SAĞ İÇERİK === */
+        .content {
+            margin-left: 260px;
+            margin-top: 90px;   /* başlık navbar’ın altında dursun */
+            padding: 30px;
         }
 
         .glass-card {
@@ -24,7 +76,6 @@
 
         .page-title {
             color: #333;
-            margin-top: 60px;
             font-weight: bold;
         }
 
@@ -32,47 +83,33 @@
             color: #555;
         }
 
-        /* Floating Add Button */
+        table thead {
+            background-color: #f7f3ed;
+        }
+
         .floating-add-btn {
             position: fixed;
             right: 30px;
             bottom: 30px;
-            z-index: 999;
-        }
-
-        nav {
-            background-color: rgba(0, 0, 0, 0.65) !important;
-        }
-
-        table thead {
-            background-color: #f7f3ed;
+            z-index: 1000;
         }
     </style>
 </head>
 
 <body class="sb-nav-fixed">
 
-
 <!-- TOP NAVBAR -->
 <nav class="navbar navbar-expand navbar-dark">
     <div class="container-fluid">
 
-        <a class="btn btn-outline-light me-3" th:href="@{/digital/accesslog}">
-            <i class="fas fa-database me-1"></i> Process
-        </a>
-
-        <a class="navbar-brand" th:href="@{/}">Library System</a>
+        <a class="navbar-brand">Library System</a>
 
         <div class="ms-auto">
             <div class="dropdown">
                 <button class="btn btn-outline-light dropdown-toggle"
-                        type="button"
-                        id="userMenuButton"
                         data-bs-toggle="dropdown">
                     <span th:text="${loggedInName}">Worker Name</span>
-
                 </button>
-
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
                         <a class="dropdown-item" th:href="@{/logout}">
@@ -87,20 +124,48 @@
 </nav>
 
 
-<div class="container">
+<!-- SOL SİYAH FULL YAN MENÜ -->
+<div class="sidebar">
+
+    <div class="sidebar-title">DİGİTAL SYSTEM</div>
+
+    <a th:href="@{/digital/worker/home}"
+       th:classappend="${activePage} == 'digitalHome' ? ' active'">
+        📚 Digital Books
+    </a>
+
+    <a th:href="@{/digital/accesslog}"
+       th:classappend="${activePage} == 'accesslog' ? ' active'">
+        📊 Digital Access Log
+    </a>
+
+    <div class="sidebar-title mt-3">MANAGEMENT</div>
+
+    <a class="nav-link" th:href="@{/workers/newWorker}">
+        👤 Add New Worker
+    </a>
+
+    <a class="nav-link" th:href="@{/users/newUser}">
+        👤 Add New User
+    </a>
+
+</div>
+
+
+<!-- SAĞ İÇERİK -->
+<div class="content">
 
     <h2 class="text-center page-title">Digital System – Worker Dashboard</h2>
-    <p class="text-center page-subtitle mb-5">
+    <p class="text-center page-subtitle mb-4">
         View, update, or delete digital books.
     </p>
 
-    <!-- BOOK LIST CARD -->
     <div class="card glass-card shadow-lg mb-5">
         <div class="card-header d-flex justify-content-between">
             <strong>Digital Books</strong>
-            <small class="text-muted">Total:
+            <small class="text-muted">
+                Total:
                 <span th:text="${books != null ? #lists.size(books) : 0}">0</span> books
-
             </small>
         </div>
 
@@ -120,9 +185,9 @@
                 <tbody>
                 <tr th:each="book, iter : ${books}">
                     <td th:text="${iter.count}">1</td>
-                    <td th:text="${book.bookName}">Book Title</td>
-                    <td th:text="${book.author.author_name}">Author</td>
-                    <td th:text="${book.category.category_name}">Category</td>
+                    <td th:text="${book.bookName}"></td>
+                    <td th:text="${book.author.author_name}"></td>
+                    <td th:text="${book.category.category_name}"></td>
                     <td>
                         <a th:if="${book.fileUrl != null}"
                            th:href="${book.fileUrl}"
@@ -133,22 +198,17 @@
                         <span th:if="${book.fileUrl == null}" class="text-muted">No link</span>
                     </td>
                     <td class="text-end">
-
-                        <!-- Edit -->
                         <a class="btn btn-sm btn-outline-primary me-2"
                            th:href="@{'/digital/books/edit/' + ${book.digitalBookId}}">
-                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                            Edit
                         </a>
 
-                        <!-- Delete -->
                         <a class="btn btn-sm btn-outline-danger"
                            th:href="@{'/digital/books/delete/' + ${book.digitalBookId}}"
-                           onclick="return confirm('Bu dijital kitabı silmek istediğine emin misin?');">
-                            <i class="fa-solid fa-trash me-1"></i> Delete
+                           onclick="return confirm('Silmek istediğine emin misin?');">
+                            Delete
                         </a>
-
                     </td>
-
                 </tr>
 
                 <tr th:if="${books == null or #lists.isEmpty(books)}">
@@ -156,21 +216,21 @@
                         No digital books have been added yet.
                     </td>
                 </tr>
-                </tbody>
 
+                </tbody>
             </table>
         </div>
     </div>
+
 </div>
 
-<!-- Floating Add Button -->
+
+<!-- ADD NEW BOOK BUTTON -->
 <a class="btn btn-dark btn-lg floating-add-btn"
    th:href="@{/digital/books/new}">
     <i class="fa-solid fa-plus me-2"></i> Add New Book
 </a>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

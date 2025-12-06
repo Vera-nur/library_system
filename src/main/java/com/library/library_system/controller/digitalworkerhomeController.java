@@ -1,13 +1,11 @@
 package com.library.library_system.controller;
 
-import com.library.library_system.entity.Person;
+import com.library.library_system.entity.Worker;
 import com.library.library_system.repository.DigitalbookRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.Collections;
 
 @Controller
 public class digitalworkerhomeController {
@@ -17,26 +15,24 @@ public class digitalworkerhomeController {
     public digitalworkerhomeController(DigitalbookRepository digitalBookRepository) {
         this.digitalBookRepository = digitalBookRepository;
     }
-//    @GetMapping("/digital/accesslog")
-//    public String showDigitalAccessLog() {
-//        return "digital-accesslog"; // digital-accesslog.html
-//    }
 
     @GetMapping("/digital/worker/home")
     public String showDigitalWorkerHome(Model model, HttpSession session) {
-        Person user = (Person) session.getAttribute("loggedUser");
 
-        if (user == null) {
+        // 🔹 Artık loggedUser değil, loggedWorker kullanıyoruz
+        Worker worker = (Worker) session.getAttribute("loggedWorker");
+
+        if (worker == null) {
+            // hiç worker yoksa login sayfasına geri
             return "redirect:/";
         }
 
-        model.addAttribute("userName", user.getName());
+        String fullName = worker.getPerson().getName() + " " + worker.getPerson().getSurname();
+        model.addAttribute("userName", fullName);
 
-        // 🔥 ÖNEMLİ: her zaman boş liste bile olsa set et
         model.addAttribute("books", digitalBookRepository.findAll());
+        model.addAttribute("activePage", "digitalHome");
 
         return "digital-worker-home";
     }
 }
-
-

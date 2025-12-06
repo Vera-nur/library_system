@@ -15,6 +15,7 @@
     <hr/>
 
     <form th:action="@{/digital/books/save}" th:object="${digitalBook}" method="post">
+
         <input type="hidden" th:field="*{digitalBookId}" />
         <!-- BOOK NAME -->
         <div class="mb-3">
@@ -41,49 +42,37 @@
         </div>
 
 
+        <!-- AUTHOR -->
         <div class="mb-3">
             <label class="form-label">Author</label>
-            <select class="form-select" name="author" required>
-                <option value="">-- Select Author --</option>
-
-                <option th:each="a : ${authors}"
-                        th:value="${a.author_id}"
-                th:text="${a.author_name}"
-                th:selected="${digitalBook.author != null and a.author_id == digitalBook.author.author_id}">
-                </option>
-            </select>
+            <input type="text"
+                   class="form-control"
+                   name="author_name"
+                   placeholder="Author name"
+                   th:value="${digitalBook.author != null  ? digitalBook.author.author_name : ''}"
+                   required>
         </div>
 
-
-
-
-
+        <!-- CATEGORY -->
         <div class="mb-3">
             <label class="form-label">Category</label>
-            <select class="form-select" name="category" required>
-                <option value="">-- Select Category --</option>
-
-                <option th:each="c : ${categories}"
-                        th:value="${c.category_id}"
-                        th:text="${c.category_name}"
-                        th:selected="${digitalBook.category != null and c.category_id == digitalBook.category.category_id}">
-                </option>
-            </select>
+            <input type="text"
+                   class="form-control"
+                   name="category_name"
+                   placeholder="Category"
+                   th:value="${digitalBook.category != null  ? digitalBook.category.category_name : ''}"
+                   required>
         </div>
 
-
+        <!-- LANGUAGE -->
         <div class="mb-3">
             <label class="form-label">Language</label>
-            <select class="form-select" name="language" required>
-                <option value="">-- Select Language --</option>
-
-                <option th:each="l : ${languages}"
-                        th:value="${l.language_id}"
-                        th:text="${l.language_name}"
-                        th:selected="${digitalBook.language != null
-                               and l.language_id == digitalBook.language.language_id}">
-                </option>
-            </select>
+            <input type="text"
+                   class="form-control"
+                   name="language_name"
+                   placeholder="Language"
+                   th:value="${digitalBook.language != null ? digitalBook.language.language_name : ''}"
+                   required>
         </div>
 
 

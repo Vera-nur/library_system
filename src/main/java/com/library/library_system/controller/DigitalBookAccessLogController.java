@@ -23,16 +23,19 @@ public class DigitalBookAccessLogController {
     @GetMapping("/accesslog")
     public String showAccessLog(Model model) {
 
-        // Eklenen kitaplar (ADD)
+        // 🟡 Ekleme logları (ADD) – tüm çalışanlar için
         List<DigitalBookAccessLog> addedLogs =
-                digitalAccessLogRepository.findByAccessType_ValueOrderByAccessDateDesc("ADD");
+                digitalAccessLogRepository
+                        .findByAccessType_ValueOrderByAccessDateDesc("ADD");
 
-        // İndirmeler (DOWNLOAD)
+        // 🟡 İndirme logları (DOWNLOAD) – tüm kullanıcılar için
         List<DigitalBookAccessLog> downloadLogs =
-                digitalAccessLogRepository.findByAccessType_ValueOrderByAccessDateDesc("DOWNLOAD");
+                digitalAccessLogRepository
+                        .findByAccessType_ValueOrderByAccessDateDesc("DOWNLOAD");
 
         model.addAttribute("addedLogs", addedLogs);
         model.addAttribute("downloadLogs", downloadLogs);
+        model.addAttribute("activePage", "accesslog");
 
         return "digital-accesslog";
     }

@@ -2,6 +2,7 @@ package com.library.library_system.controller;
 
 import com.library.library_system.entity.*;
 import com.library.library_system.repository.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,44 +46,34 @@ public class digitalbookController {
         this.digitalAccessLogRepository=digitalAccessLogRepository;
     }
 
-    // 1) FORMU AÇAN GET  -->  /digital/books/new
-    @GetMapping("/new")
-    public String showNewDigitalBookForm(Model model) {
-
-        DigitalBook digitalBook = new DigitalBook();   // boş obje
-
-        model.addAttribute("digitalBook", digitalBook);
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("authors", authorRepository.findAll());
-        model.addAttribute("languages", bookLanguageRepository.findAll());
-
-
-        return "newDigitalBook";   // src/main/resources/templates/newDigitalBook.html
-    }
-
-
     @PostMapping("/save")
     public String saveDigitalBook(
             @ModelAttribute("digitalBook") DigitalBook digitalBook,
-            @RequestParam("category") Integer categoryId,
-            @RequestParam("author") Integer authorId,
-            @RequestParam("language") Integer languageId,
+            @RequestParam("author_name") String author_name,
+            @RequestParam("category_name") String category_name,
+            @RequestParam("language_name") String language_name,
             @RequestParam(value = "edition", required = false) Integer editionNumber,
             @RequestParam(value = "publisher", required = false) String publisher,
             @RequestParam("fileFormat") String fileFormat,
-            @RequestParam("fileUrl") String fileUrl
-            // Principal principal  ---> ŞİMDİLİK KULLANMIYORUZ, SİLEBİLİRSİN
+            @RequestParam("fileUrl") String fileUrl,
+            HttpSession session
     ) {
         System.out.println(">>> saveDigitalBook ÇALIŞTI");
 
         // 0) Yeni mi, edit mi?
-        boolean isNew = (digitalBook.getDigitalBookId() == null);
+        boolean isNew = (digitalBook.getDigitalBookId() == null
+                || digitalBook.getDigitalBookId() == 0);
+
         System.out.println("isNew = " + isNew);
 
+        Category category = getOrCreateCategory(category_name);
+        Author author = getOrCreateAuthor(author_name);
+        BookLanguage language = getOrCreateLanguage(language_name);
+
         // 1) Dijital kitabı doldur
-        digitalBook.setCategory(categoryRepository.findById(categoryId).orElse(null));
-        digitalBook.setAuthor(authorRepository.findById(authorId).orElse(null));
-        digitalBook.setLanguage(bookLanguageRepository.findById(languageId).orElse(null));
+        digitalBook.setCategory(category);
+        digitalBook.setAuthor(author);
+        digitalBook.setLanguage(language);
         digitalBook.setFileFormat(fileFormat);
         digitalBook.setFileUrl(fileUrl);
 
@@ -103,9 +94,11 @@ public class digitalbookController {
         if (isNew) {
             System.out.println(">>> ACCESS LOG BLOĞUNA GİRİYORUM");
 
-            // TODO: şimdilik test için worker_id = 1 kullanıyoruz
-            Worker worker = workerRepository.findById(1)
-                    .orElseThrow(() -> new IllegalStateException("Worker id=1 bulunamadı"));
+            Worker worker = (Worker) session.getAttribute("loggedWorker");
+            if (worker == null) {
+                throw new IllegalStateException("Worker oturumu bulunamadı! Önce worker olarak giriş yap.");
+            }
+
 
             // DIGITAL_ACCESS_TYPE / ADD parametresi
             Parameter addType = parameterRepository
@@ -143,6 +136,19 @@ public class digitalbookController {
         return "newDigitalBook";
     }
 
+    @GetMapping("/new")
+    public String showNewDigitalBookForm(Model model) {
+        DigitalBook digitalBook = new DigitalBook();
+
+        model.addAttribute("digitalBook", digitalBook);
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("authors", authorRepository.findAll());
+        model.addAttribute("languages", bookLanguageRepository.findAll());
+
+        return "newDigitalBook"; // templates/newDigitalBook.html
+    }
+
+
 
 
     @GetMapping("/delete/{id}")
@@ -150,6 +156,50 @@ public class digitalbookController {
         digitalBookRepository.deleteById(id);
         return "redirect:/digital/worker/home";
     }
+
+    private Category getOrCreateCategory(String name) {
+        String trimmed = name == null ? null : name.trim();
+        if (trimmed == null || trimmed.isEmpty()) {
+            throw new IllegalArgumentException("Category name boş olamaz");
+        }
+
+        return categoryRepository.findByCategory_name(trimmed)
+                .orElseGet(() -> {
+                    Category c = new Category();
+                    c.setCategory_name(trimmed);
+                    return categoryRepository.save(c);
+                });
+    }
+
+    private Author getOrCreateAuthor(String name) {
+        String trimmed = name == null ? null : name.trim();
+        if (trimmed == null || trimmed.isEmpty()) {
+            throw new IllegalArgumentException("Author name boş olamaz");
+        }
+
+        return authorRepository.findByAuthor_name(trimmed)
+                .orElseGet(() -> {
+                    Author a = new Author();
+                    a.setAuthor_name(trimmed);
+                    return authorRepository.save(a);
+                });
+    }
+
+    private BookLanguage getOrCreateLanguage(String name) {
+        String trimmed = name == null ? null : name.trim();
+        if (trimmed == null || trimmed.isEmpty()) {
+            throw new IllegalArgumentException("Language name boş olamaz");
+        }
+
+        return bookLanguageRepository.findByLanguage_name(trimmed)
+                .orElseGet(() -> {
+                    BookLanguage l = new BookLanguage();
+                    l.setLanguage_name(trimmed);
+                    return bookLanguageRepository.save(l);
+                });
+    }
+
+
 }
 
 

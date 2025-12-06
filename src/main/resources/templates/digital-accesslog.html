@@ -10,9 +10,62 @@
 
     <style>
         body {
-            background: linear-gradient(135deg, #f3ede4, #e8e2da);
-            min-height: 100vh;
+            background: #f0ebe3;
             font-family: Arial, sans-serif;
+        }
+
+        /* ÜST NAVBAR ve SOL SİDEBAR (worker-home ile aynı) */
+        nav.navbar {
+            background-color: #111 !important;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111;
+            color: white;
+            padding-top: 70px;
+            z-index: 998;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 14px 20px;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .sidebar a:hover {
+            background: #333;
+            color: white;
+        }
+
+        .sidebar .active {
+            background: #005eff;
+            color: white !important;
+        }
+
+        .sidebar-title {
+            padding: 10px 20px;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: #aaa;
+        }
+
+        /* SAĞ İÇERİK */
+        .content {
+            margin-left: 260px;
+            margin-top: 90px;
+            padding: 30px;
         }
 
         .glass-card {
@@ -22,16 +75,11 @@
             backdrop-filter: blur(4px);
         }
 
-        nav {
-            background: rgba(0,0,0,0.65) !important;
-        }
-
         table thead {
             background-color: #f7f3ed;
         }
 
         .page-title {
-            margin-top: 30px;
             font-weight: bold;
             color: #333;
         }
@@ -47,134 +95,156 @@
 
 <!-- TOP NAVBAR -->
 <nav class="navbar navbar-expand navbar-dark">
-    <!-- Geri dön butonu -->
-    <a class="btn btn-link text-white" th:href="@{/digital/worker/home}">
-        <i class="fa-solid fa-arrow-left"></i>
-    </a>
+    <div class="container-fluid">
 
-    <a class="navbar-brand ps-3" th:href="@{/digital/worker/home}">Library System</a>
+        <a class="navbar-brand">Library System</a>
 
-    <div class="ms-auto me-3">
-        <div class="dropdown">
-            <button class="btn btn-outline-light dropdown-toggle" type="button"
-                    id="userMenuButton" data-bs-toggle="dropdown">
-                <span th:text="${loggedInName}">Worker Name</span>
-            </button>
+        <div class="ms-auto me-3">
+            <div class="dropdown">
+                <button class="btn btn-outline-light dropdown-toggle" type="button"
+                        id="userMenuButton" data-bs-toggle="dropdown">
+                    <span th:text="${loggedInName}">Worker Name</span>
+                </button>
 
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                    <a class="dropdown-item" th:href="@{/logout}">
-                        <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
-                    </a>
-                </li>
-            </ul>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" th:href="@{/logout}">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
+
     </div>
 </nav>
 
-<div id="layoutSidenav_content">
-    <main>
-        <div class="container py-4">
+<!-- SOL SİYAH YAN MENÜ -->
+<div class="sidebar">
 
-            <h2 class="text-center page-title">Digital Access Log</h2>
-            <p class="text-center page-subtitle">
-                Dijital kitap ekleme ve indirme kayıtlarını görüntüleyin.
-            </p>
+    <div class="sidebar-title">DİJİTAL SİSTEM</div>
 
-            <div class="row">
+    <a th:href="@{/digital/worker/home}"
+       th:classappend="${activePage} == 'digitalHome' ? ' active'">
+        📚 Dijital Kitaplar
+    </a>
 
-                <!-- SOL PANEL: EKLENEN DİJİTAL KİTAPLAR -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card glass-card h-100">
-                        <div class="card-header">
-                            <strong>Eklenen Dijital Kitaplar</strong>
-                            <small class="text-muted d-block">
-                                Hangi görevli hangi kitabı ekledi?
-                            </small>
-                        </div>
+    <a th:href="@{/digital/accesslog}"
+       th:classappend="${activePage} == 'accesslog' ? ' active'">
+        📊 Digital Access Log
+    </a>
 
-                        <div class="card-body p-0">
-                            <table class="table mb-0 align-middle">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Kitap</th>
-                                    <th>Ekleyen Kullanıcı</th>
-                                    <th>Tarih</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <!-- Kayıtlar -->
-                                <tr th:each="log, iter : ${addedLogs}">
-                                    <td th:text="${iter.count}">1</td>
-                                    <td th:text="${log.digitalBook.bookName}">Kitap Adı</td>
-                                    <!-- burada user / worker için şimdilik toString kullanıyoruz -->
-                                    <td th:text="${log.worker.person.name + ' ' + log.worker.person.surname}">Worker</td>
-                                    <td th:text="${#temporals.format(log.accessDate,'yyyy-MM-dd HH:mm')}">
-                                        2025-12-05 21:00
-                                    </td>
-                                </tr>
+    <div class="sidebar-title mt-3">YÖNETİM</div>
 
-                                <!-- Eğer hiç kayıt yoksa -->
-                                <tr th:if="${#lists.isEmpty(addedLogs)}">
-                                    <td colspan="4" class="text-center py-3 text-muted">
-                                        Henüz dijital kitap ekleme kaydı yok.
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+    <a class="nav-link" th:href="@{/workers/newWorker}">
+        👤 Add New Worker
+    </a>
+
+    <a class="nav-link" th:href="@{/users/newUser}">
+        👤 Add New User
+    </a>
+
+
+</div>
+
+<!-- SAĞ İÇERİK: ACCESS LOG TABLOLARI -->
+<div class="content">
+
+    <h2 class="text-center page-title">Digital Access Log</h2>
+    <p class="text-center page-subtitle">
+        View digital book addition and download records.
+    </p>
+
+    <div class="row">
+
+        <!-- SOL: EKLENEN DİJİTAL KİTAPLAR -->
+        <div class="col-lg-6 mb-4">
+            <div class="card glass-card h-100">
+                <div class="card-header">
+                    <strong>Added Digital Books</strong>
+                    <small class="text-muted d-block">
+                        Which worker added which book?
+                    </small>
                 </div>
 
-                <!-- SAĞ PANEL: İNDİRME KAYITLARI -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card glass-card h-100">
-                        <div class="card-header">
-                            <strong>İndirme Kayıtları</strong>
-                            <small class="text-muted d-block">
-                                Hangi kullanıcı hangi kitabı indirdi?
-                            </small>
-                        </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0 align-middle">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Book</th>
+                            <th>Added by Worker</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="log, iter : ${addedLogs}">
+                            <td th:text="${iter.count}">1</td>
+                            <td th:text="${log.digitalBook.bookName}">Book Name</td>
+                            <td th:text="${log.worker.person.name + ' ' + log.worker.person.surname}">Worker</td>
+                            <td th:text="${#temporals.format(log.accessDate,'yyyy-MM-dd HH:mm')}">
+                                2025-12-05 21:00
+                            </td>
+                        </tr>
 
-                        <div class="card-body p-0">
-                            <table class="table mb-0 align-middle">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Üye</th>
-                                    <th>Kitap</th>
-                                    <th>Tarih</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <!-- Kayıtlar -->
-                                <tr th:each="log, iter : ${downloadLogs}">
-                                    <td th:text="${iter.count}">1</td>
-                                    <td th:text="${log.user.person.name + ' ' + log.user.person.surname}">User</td>
-                                    <td th:text="${log.digitalBook.bookName}">Kitap Adı</td>
-                                    <td th:text="${#temporals.format(log.accessDate,'yyyy-MM-dd HH:mm')}">
-                                        2025-12-05 21:00
-                                    </td>
-                                </tr>
-
-                                <!-- Eğer hiç kayıt yoksa -->
-                                <tr th:if="${#lists.isEmpty(downloadLogs)}">
-                                    <td colspan="4" class="text-center py-3 text-muted">
-                                        Henüz indirme kaydı yok.
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                        <tr th:if="${#lists.isEmpty(addedLogs)}">
+                            <td colspan="4" class="text-center py-3 text-muted">
+                                There are no digital book addition records yet.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>
-
         </div>
-    </main>
-</div>
+
+        <!-- SAĞ: İNDİRME KAYITLARI -->
+        <div class="col-lg-6 mb-4">
+            <div class="card glass-card h-100">
+                <div class="card-header">
+                    <strong>Download Records</strong>
+                    <small class="text-muted d-block">
+                        Which user downloaded which book?
+                    </small>
+                </div>
+
+                <div class="card-body p-0">
+                    <table class="table mb-0 align-middle">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Book</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="log, iter : ${downloadLogs}">
+                            <td th:text="${iter.count}">1</td>
+                            <td th:text="${log.user.person.name + ' ' + log.user.person.surname}">User</td>
+                            <td th:text="${log.digitalBook.bookName}">Book Name</td>
+                            <td th:text="${#temporals.format(log.accessDate,'yyyy-MM-dd HH:mm')}">
+                                2025-12-05 21:00
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(downloadLogs)}">
+                            <td colspan="4" class="text-center py-3 text-muted">
+                                There are no download records yet.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div> <!-- /content -->
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
