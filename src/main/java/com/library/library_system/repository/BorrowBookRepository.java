@@ -24,4 +24,10 @@ public interface BorrowBookRepository extends JpaRepository<BorrowBook, Integer>
     @Query(value = "EXEC sp_BorrowBook :userId, :bookId", nativeQuery = true)
     void borrowBook(@Param("userId") Integer userId, @Param("bookId") Integer bookId);
 
+    // Kitabı geri alma (stok +1)
+    @Modifying
+    @Transactional
+    @Query(value = "EXEC sp_ReturnBook :borrowId", nativeQuery = true)
+    void returnBook(@Param("borrowId") Integer borrowId);
+
 }

@@ -1,0 +1,106 @@
+<!--library-user-home.html -->
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Kütüphane - Kullanıcı Paneli</title>
+    <link href="/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand ps-3" th:href="@{/library/user/home}">Kütüphane</a>
+</nav>
+
+<div id="layoutSidenav">
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4 mt-4">
+                <h1 class="mb-4">Kütüphane Kullanıcı Paneli</h1>
+
+                <!-- Ödünç aldığım kitaplar -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-book me-1"></i> Ödünç Aldığım Kitaplar
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Kitap</th>
+                                <th>Alış Tarihi</th>
+                                <th>İade Tarihi</th>
+                                <th>Durum</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="borrow : ${borrowList}">
+                                <td th:text="${borrow.bookName}"></td>
+                                <td th:text="${borrow.startDate}"></td>
+                                <td th:text="${borrow.endDate}"></td>
+                                <td th:text="${borrow.status}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(borrowList)}">
+                                <td colspan="4" class="text-center">Şu anda ödünç aldığın kitap yok.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tüm kitaplar (sadece görüntüleme ve “rezerve et” butonu ileride gelecek) -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-list me-1"></i> Tüm Kitaplar
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Kitap</th>
+                                <th>Yazar</th>
+                                <th>Kategori</th>
+                                <th>Stok</th>
+                                <th>İşlemler</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="book : ${books}">
+                                <td th:text="${book.bookName}"></td>
+                                <td th:text="${book.authorName}"></td>
+                                <td th:text="${book.categoryName}"></td>
+                                <td th:text="${book.stock}"></td>
+                                <td>
+                                    <!-- SONRA: Rezerve Et / İptal Et butonları -->
+                                    <button class="btn btn-sm btn-outline-primary" disabled>
+                                        Rezerve Et (yakında)
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(books)}">
+                                <td colspan="5" class="text-center">Kayıtlı kitap bulunamadı.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Kütüphane Sistemi 2025</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/js/scripts.js"></script>
+</body>
+</html>

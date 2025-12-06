@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ödünç İşlemleri</title>
+
+    <!-- SB Admin / Bootstrap CSS -->
+    <link href="/css/styles.css" rel="stylesheet"/>
+
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+            crossorigin="anonymous"></script>
+
+    <style>
+        /* PASTEL BACKGROUND */
+        body {
+            background: linear-gradient(135deg, #f3ede4, #e8e2da);
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            border-radius: 16px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .page-title {
+            color: #333;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .page-subtitle {
+            color: #555;
+        }
+
+        nav.navbar {
+            background-color: rgba(0, 0, 0, 0.85) !important;
+        }
+
+        table thead {
+            background-color: #f7f3ed;
+        }
+
+        .badge-status {
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body class="sb-nav-fixed">
+
+<!-- TOP NAVBAR -->
+<nav class="sb-topnav navbar navbar-expand navbar-dark">
+    <a class="navbar-brand ps-3" th:href="@{/library/worker/home}">Kütüphane Sistemi</a>
+
+    <div class="ms-auto me-3">
+        <div class="dropdown">
+            <button class="btn btn-outline-light dropdown-toggle"
+                    type="button"
+                    id="userMenuButton"
+                    data-bs-toggle="dropdown">
+                <span th:text="${loggedInName} ?: 'Kütüphane Görevlisi'">Kütüphane Görevlisi</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" th:href="@{/logout}">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i> Çıkış Yap
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="layoutSidenav">
+
+    <!-- SOL MENÜ -->
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+
+                    <div class="sb-sidenav-menu-heading">GENEL</div>
+
+                    <a class="nav-link" th:href="@{/library/worker/home}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Ana Panel
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">KÜTÜPHANE</div>
+
+                    <a class="nav-link" th:href="@{/books}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
+                        Kitaplar
+                    </a>
+
+                    <a class="nav-link active" th:href="@{/library/borrow/list}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-hand-holding"></i></div>
+                        Ödünç İşlemleri
+                    </a>
+
+                </div>
+            </div>
+
+        </nav>
+    </div>
+
+    <!-- İÇERİK -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container mt-4">
+
+                <!-- BAŞLIK -->
+                <h2 class="text-center page-title">Ödünç İşlemleri</h2>
+                <p class="text-center page-subtitle mb-4">
+                    Tüm ödünç verilen kitapları görüntüleyin, filtreleyin ve teslim alın.
+                </p>
+
+                <!-- FİLTRE / ARAMA KARTI -->
+                <div class="card glass-card shadow-sm mb-4">
+                    <div class="card-body d-flex flex-wrap align-items-center justify-content-between">
+
+                        <!-- Üye adı ile arama linki -->
+                        <div class="mb-2">
+                            <a class="btn btn-outline-dark btn-sm"
+                               th:href="@{/library/borrow/search}">
+                                <i class="fa-solid fa-magnifying-glass me-1"></i>
+                                Üye adı ile ara
+                            </a>
+                        </div>
+
+                        <!-- Sadece ödünçte olanlar linki -->
+                        <div class="mb-2">
+                            <a class="btn btn-outline-secondary btn-sm"
+                               th:href="@{/library/borrow/list}">
+                                <i class="fa-solid fa-rotate-right me-1"></i>
+                                Tüm İşlemleri Göster
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ÖDÜNÇ TABLOSU -->
+                <div class="card glass-card shadow-lg">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <strong>Ödünç Kayıtları</strong>
+                        <small class="text-muted">
+                            Toplam: <span th:text="${#lists.size(borrows)}">0</span> kayıt
+                        </small>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead>
+                            <tr>
+                                <th>Üye Adı</th>
+                                <th>Kitap</th>
+                                <th>Alış Tarihi</th>
+                                <th>İade Tarihi</th>
+                                <th>Durum</th>
+                                <th class="text-end">İşlem</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Her bir kayıt için satır -->
+                            <tr th:each="borrow : ${borrows}">
+                                <td th:text="${borrow.fullName}">Üye Adı</td>
+                                <td th:text="${borrow.bookName}">Kitap Adı</td>
+                                <td th:text="${borrow.startDate}">2025-01-01</td>
+                                <td th:text="${borrow.endDate}">2025-01-15</td>
+
+                                <td>
+                                    <span class="badge-status"
+                                          th:text="${borrow.status}"
+                                          th:classappend="${borrow.status == 'Gecikmiş'} ? ' bg-danger text-white' : ' bg-success text-white'">
+                                        Ödünçte
+                                    </span>
+                                </td>
+
+                                <td class="text-end">
+                                    <!-- Teslim Al butonu (POST) -->
+                                    <form th:action="@{/library/borrow/return/{id}(id=${borrow.borrowBookId})}"
+                                          method="post" class="d-inline">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-primary"
+                                                onclick="return confirm('Bu kitabı teslim almak istiyor musunuz?');">
+                                            <i class="fa-solid fa-arrow-rotate-left me-1"></i>
+                                            Teslim Al
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <!-- Kayıt yoksa -->
+                            <tr th:if="${#lists.isEmpty(borrows)}">
+                                <td colspan="6" class="text-center py-4">
+                                    Henüz ödünç verilmiş kitap kaydı bulunmuyor.
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="text-muted small">© 2025 Kütüphane Sistemi</div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -25,8 +25,6 @@ public class BookDetailsView {
     private String categoryName;
 
     @Column(name = "status_value")
-    private String status;
+    private String statusText;
 
-    @Column(name = "type_value")
-    private String type;
 }

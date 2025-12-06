@@ -6,6 +6,7 @@ import com.library.library_system.entity.Worker;
 import com.library.library_system.repository.PersonRepository;
 import com.library.library_system.repository.UserRepository;
 import com.library.library_system.repository.WorkerRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,7 @@ public class LoginController {
                               @RequestParam String role,   // user / worker (ekrandan seçilen)
                               @RequestParam String email,
                               @RequestParam String password,
+                              jakarta.servlet.http.HttpSession session,
                               Model model) {
 
         System.out.println(">> LOGIN TRY email=" + email + " role=" + role + " system=" + system);
@@ -88,11 +90,24 @@ public class LoginController {
                 model.addAttribute("error", "Bu kişi için kullanıcı kaydı bulunamadı.");
                 return showLogin(system, role, model);
             }
+            // 🔹 Session'a userId yaz
+            User user = optUser.get();
+            // 🔹 Dijital taraf için:
+            session.setAttribute("loggedUser", person);   // Person veya User, ikisinden birini kullanabilirsiniz
 
-            // TODO: Session'a user koy
-            return "digital".equals(system)
-                    ? "redirect:/digital/dashboard"
-                    : "redirect:/library/dashboard";
+            session.setAttribute("userId", user.getUserId());
+            String fullName = person.getName() + " " + person.getSurname();
+            session.setAttribute("fullName", fullName);
+
+            // >>> YÖNLENDİRME BURASI <<<
+            if ("library".equals(system)) {
+                // Kütüphane User home
+                return "redirect:/library/user/home";
+            } else {
+                // Dijital User home
+                return "redirect:/digital-user-home";
+            }
+
 
         } else if ("WORKER".equalsIgnoreCase(personType)) {
 
@@ -108,10 +123,21 @@ public class LoginController {
                 return showLogin(system, role, model);
             }
 
-            // TODO: Session'a worker koy
-            return "digital".equals(system)
-                    ? "redirect:/digital/dashboard"
-                    : "redirect:/library/dashboard";
+            Worker worker = optWorker.get();
+            // 🔹 Dijital taraf için:
+            session.setAttribute("loggedWorker", worker);
+
+            // 🔹 Session'a workerId yaz, Kütüphane tarafı için:
+            session.setAttribute("workerId", worker.getWorkerId());
+
+            // >>> YÖNLENDİRME BURASI <<<
+            if ("library".equals(system)) {
+                return "redirect:/library/worker/home";
+            } else {
+                // Dijital Worker home – istersen endpoint'i buna göre açarsın
+                return "redirect:/digital/worker/home";
+            }
+
 
         } else {
             model.addAttribute("error", "Bu kişinin tipi (person_type) geçersiz: " + personType);

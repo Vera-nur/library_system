@@ -3,34 +3,114 @@
 <head>
     <meta charset="utf-8" />
     <title>Ödünç Ver</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
-<body class="bg-light">
-<div class="container mt-5">
-    <div class="card shadow-lg mx-auto" style="max-width: 500px;">
-        <div class="card-header">
-            <h3>Ödünç Verme İşlemi</h3>
-        </div>
-        <div class="card-body">
-            <form th:action="@{/borrows/create}" method="post">
 
-                <input type="hidden" name="bookId" th:value="${bookId}" />
+<body class="sb-nav-fixed">
 
-                <div class="mb-3">
-                    <label class="form-label">Kitabı Kim Alıyor?</label>
-                    <select name="userId" class="form-select" required>
-                        <option value="">Kullanıcı Seçiniz...</option>
-                        <option th:each="user : ${users}"
-                                th:value="${user.userId}"
-                                th:text="${user.person.name + ' ' + user.person.surname}">
-                        </option>
-                    </select>
+<!-- NAVBAR -->
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand ps-3" th:href="@{/library/worker/home}">Kütüphane</a>
+</nav>
+
+
+<div id="layoutSidenav">
+
+    <!-- SIDEBAR -->
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+
+                    <div class="sb-sidenav-menu-heading">GENEL</div>
+
+                    <a class="nav-link" th:href="@{/library/worker/home}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Ana Panel
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">KÜTÜPHANE</div>
+
+                    <a class="nav-link" th:href="@{/books}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
+                        Kitaplar
+                    </a>
+
+                    <a class="nav-link active" th:href="@{/library/borrow/list}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-hand-holding"></i></div>
+                        Ödünç İşlemleri
+                    </a>
+
+                </div>
+            </div>
+
+        </nav>
+    </div>
+
+    <!-- CONTENT -->
+    <div id="layoutSidenav_content">
+        <main class="container-fluid px-4">
+
+            <h2 class="mt-4">Ödünç Verme İşlemi</h2>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a th:href="@{/library/worker/home}">Ana Panel</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/books}">Kitaplar</a></li>
+                <li class="breadcrumb-item active">Ödünç Ver</li>
+            </ol>
+
+            <div class="card shadow-sm col-md-6">
+
+                <div class="card-header">
+                    <strong>Kitabı ödünç vereceğiniz kullanıcıyı seçin</strong>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">İşlemi Tamamla</button>
-            </form>
-        </div>
+                <div class="card-body">
+
+                    <form th:action="@{/library/borrow/create}" method="post">
+
+                        <!-- bookId gizli -->
+                        <input type="hidden" name="bookId" th:value="${bookId}" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Kullanıcı Seçiniz</label>
+                            <select name="userId" class="form-select" required>
+                                <option value="">Seçiniz...</option>
+                                <option th:each="user : ${users}"
+                                        th:value="${user.userId}"
+                                        th:text="${user.person.name + ' ' + user.person.surname}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-check"></i> İşlemi Tamamla
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright © Kütüphane Sistemi 2025</div>
+                </div>
+            </div>
+        </footer>
     </div>
+
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/scripts.js"></script>
+
 </body>
 </html>

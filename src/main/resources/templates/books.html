@@ -12,7 +12,7 @@
 
 <!-- Buraya index.html'deki NAVBAR ve SIDEBAR'ı kopyalayabilirsin -->
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand ps-3" th:href="@{/}">Kütüphane</a>
+    <a class="navbar-brand ps-3" th:href="@{/library/worker/home}">Kütüphane</a>
 </nav>
 
 <div id="layoutSidenav">
@@ -22,7 +22,7 @@
             <div class="sb-sidenav-menu">
                 <div class="nav">
                     <div class="sb-sidenav-menu-heading">GENEL</div>
-                    <a class="nav-link" th:href="@{/}">
+                    <a class="nav-link" th:href="@{/library/worker/home}">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                         Ana Panel
                     </a>
@@ -52,6 +52,15 @@
                     </a>
                 </div>
 
+                <!-- Başarı & Hata Mesajları -->
+                <div class="container mt-3">
+                    <div th:if="${successMessage}" class="alert alert-success" role="alert"
+                         th:text="${successMessage}"></div>
+
+                    <div th:if="${errorMessage}" class="alert alert-danger" role="alert"
+                         th:text="${errorMessage}"></div>
+                </div>
+
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-book me-1"></i>
@@ -71,16 +80,16 @@
                             <tr th:each="book : ${books}">
                                 <td th:text="${book.bookId}"></td>
                                 <td th:text="${book.bookName}"></td>
-                                <td th:text="${book.authorName}"></td>   <td th:text="${book.categoryName}"></td> <td>
-                                <span th:if="${book.type == 'physical'}" class="badge bg-secondary">Fiziksel</span>
-                                <span th:unless="${book.type == 'physical'}" class="badge bg-info">Dijital</span>
+                                <td th:text="${book.authorName}"></td>
+                                <td th:text="${book.categoryName}"></td> <td>
+                                <span class="badge bg-success" th:text="${book.statusText}"></span>
                             </td>
 
                                 <td th:text="${book.stock}"></td>
 
                                 <td>
                                     <a th:if="${book.stock > 0}"
-                                       th:href="@{'/borrows/book/' + ${book.bookId}}"
+                                       th:href="@{'/library/borrow/book/' + ${book.bookId}}"
                                        class="btn btn-sm btn-success">
                                         <i class="fas fa-hand-holding"></i> Ödünç Ver
                                     </a>

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class BorrowDetailsView {
     @Id
     @Column(name = "borrowbook_id")
-    private Integer id;
+    private Integer borrowBookId;
 
     @Column(name = "full_name")
     private String fullName;

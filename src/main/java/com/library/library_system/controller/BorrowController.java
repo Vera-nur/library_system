@@ -4,16 +4,21 @@ import com.library.library_system.entity.Book;
 import com.library.library_system.repository.BookRepository;
 import com.library.library_system.repository.UserRepository;
 import com.library.library_system.service.BorrowService;
+import com.library.library_system.repository.BorrowViewRepository;
+import com.library.library_system.entity.BorrowDetailsView;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
 @Controller
-@RequestMapping("/borrows")
+@RequestMapping("/library/borrow")
 @RequiredArgsConstructor
 public class BorrowController {
 
+    private final BorrowViewRepository borrowViewRepository;
     private final BorrowService borrowService;
     private final UserRepository userRepository; // Kullanıcı seçtirmek için lazım
     private final BookRepository bookRepository;
@@ -37,6 +42,8 @@ public class BorrowController {
         return "borrow-form";
     }
 
+
+
     // 2. ADIM: Form doldurulup "Onayla" denince burası çalışır.
     @PostMapping("/create")
     public String completeBorrow(@RequestParam Integer userId, @RequestParam Integer bookId) {
@@ -46,6 +53,60 @@ public class BorrowController {
             // Stok yoksa veya hata olursa buraya düşer
             return "redirect:/books?error=StokYok";
         }
-        return "redirect:/"; // Başarılıysa Ana Sayfaya (Dashboard) git
+        return "redirect:/library/worker/home";
+    }
+
+    // --- 1. Ödünçteki kitaplar listesi ---
+    @GetMapping("/list")
+    public String listBorrowedBooks(Model model) {
+
+        // Sadece ödünçte (status = "Ödünçte") olan kayıtları getir
+        List<BorrowDetailsView> borrows = borrowViewRepository.findByStatus("Ödünçte");
+
+        model.addAttribute("borrows", borrows);
+        return "borrow-list"; // HTML sayfası
+    }
+
+    // --- 2. Üye adı ile arama (hem form hem sonuç) ---
+    // /library/borrow/search
+    @GetMapping("/search")
+    public String searchBorrow(
+            @RequestParam(required = false) String name,
+            Model model) {
+
+        // Varsayılan: hiç sonuç yok (sayfa ilk açılış)
+        java.util.List<BorrowDetailsView> borrows = null;
+
+        if (name != null && !name.trim().isEmpty()) {
+            String trimmed = name.trim();
+
+            // İsimle eşleşen KAYITLARI çekiyoruz
+            borrows = borrowViewRepository.findByFullNameContainingIgnoreCase(trimmed);
+
+            if (borrows.isEmpty()) {
+                model.addAttribute("infoMessage",
+                        "“" + trimmed + "” adına ait aktif ödünç kaydı bulunamadı.");
+            }
+
+            model.addAttribute("name", trimmed);
+        } else {
+            model.addAttribute("name", "");
+        }
+
+        // null veya dolu olabilir – view buna göre davranacak
+        model.addAttribute("borrows", borrows);
+
+        return "borrow-search";
+    }
+
+    // --- 4. Kitabı geri alma (POST) ---
+    @PostMapping("/return/{id}")
+    public String returnBook(@PathVariable Integer id) {
+
+        // Service üzerinden kitabı teslim alıyoruz
+        borrowService.returnBook(id);
+
+        // İşlem bittikten sonra tekrar listeye dön
+        return "redirect:/library/borrow/list";
     }
 }
