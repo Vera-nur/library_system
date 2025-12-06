@@ -27,14 +27,17 @@ public class DigitalBook {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
-
-    @ManyToOne
     @JoinColumn(name = "language_id")
     private BookLanguage language;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
+
+    @ManyToOne
+    @JoinColumn(name = "edition_id")
+    private BookEdition edition;
+
+    @Column(name = "file_url")
+    private String fileUrl;
 }

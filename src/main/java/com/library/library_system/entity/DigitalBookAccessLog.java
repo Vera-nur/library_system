@@ -16,7 +16,7 @@ public class DigitalBookAccessLog {
     private Integer digitalAccessId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;   // Dijital kitabı hangi kullanıcı açtı
 
     @ManyToOne
@@ -30,4 +30,8 @@ public class DigitalBookAccessLog {
 
     @Column(name = "access_date", nullable = false)
     private LocalDateTime accessDate = LocalDateTime.now();
+
+    @ManyToOne
+    @JoinColumn(name = "worker_id", nullable = false)
+    private Worker worker;
 }

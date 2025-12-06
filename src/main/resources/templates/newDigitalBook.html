@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Digital Book</title>
+    <link href="/css/styles.css" rel="stylesheet"/>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<div class="container mt-5">
+    <h2>Add New Digital Book</h2>
+    <hr/>
+
+    <form th:action="@{/digital/books/save}" th:object="${digitalBook}" method="post">
+        <input type="hidden" th:field="*{digitalBookId}" />
+        <!-- BOOK NAME -->
+        <div class="mb-3">
+            <label class="form-label">Book Name</label>
+            <input type="text" class="form-control" th:field="*{bookName}" required>
+        </div>
+
+        <!-- FORMAT -->
+        <div class="mb-3">
+            <label class="form-label">File Format</label>
+            <input type="text" class="form-control"
+                   name="fileFormat"
+                   placeholder="Örn: PDF, EPUB"
+                   th:value="${digitalBook.fileFormat}">
+        </div>
+
+        <!-- URL -->
+        <div class="mb-3">
+            <label class="form-label">File URL</label>
+            <input type="url" class="form-control"
+                   name="fileUrl"
+                   placeholder="https://..."
+                   th:value="${digitalBook.fileUrl}">
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label">Author</label>
+            <select class="form-select" name="author" required>
+                <option value="">-- Select Author --</option>
+
+                <option th:each="a : ${authors}"
+                        th:value="${a.author_id}"
+                th:text="${a.author_name}"
+                th:selected="${digitalBook.author != null and a.author_id == digitalBook.author.author_id}">
+                </option>
+            </select>
+        </div>
+
+
+
+
+
+        <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select class="form-select" name="category" required>
+                <option value="">-- Select Category --</option>
+
+                <option th:each="c : ${categories}"
+                        th:value="${c.category_id}"
+                        th:text="${c.category_name}"
+                        th:selected="${digitalBook.category != null and c.category_id == digitalBook.category.category_id}">
+                </option>
+            </select>
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label">Language</label>
+            <select class="form-select" name="language" required>
+                <option value="">-- Select Language --</option>
+
+                <option th:each="l : ${languages}"
+                        th:value="${l.language_id}"
+                        th:text="${l.language_name}"
+                        th:selected="${digitalBook.language != null
+                               and l.language_id == digitalBook.language.language_id}">
+                </option>
+            </select>
+        </div>
+
+
+
+
+        <!-- EDITION NUMBER -->
+        <div class="mb-3">
+            <label class="form-label">Edition (optional)</label>
+            <input type="number" class="form-control mb-2"
+                   name="edition"
+                   placeholder="Edition number (e.g. 1, 2, 3)"
+                   th:value="${digitalBook.edition != null ? digitalBook.edition.editionNumber : null}" />
+        </div>
+
+        <!-- PUBLISHER -->
+        <div class="mb-3">
+            <label class="form-label">Publisher (optional)</label>
+            <input type="text" class="form-control mb-2"
+                   name="publisher"
+                   placeholder="Publisher"
+                   th:value="${digitalBook.edition != null ? digitalBook.edition.publisher : null}" />
+        </div>
+
+
+
+
+        <!-- PAGE COUNT -->
+        <div class="mb-3">
+            <label class="form-label">Page Count</label>
+            <input type="number"
+                   class="form-control"
+                   th:field="*{pageCount}"
+                   min="1"
+                   placeholder="e.g. 250" />
+        </div>
+
+
+        <button type="submit" class="btn btn-dark mt-3">Save</button>
+    </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
