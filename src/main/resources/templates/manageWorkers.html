@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Workers</title>
+    <link href="/css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Manage Workers</h2>
+    <hr/>
+
+    <!-- Back to Home button -->
+    <div class="mb-3">
+        <a class="btn btn-secondary"
+           th:href="${systemSource == 'digital'} ? '/digital/worker/home' : '/library/worker/home'">
+            ← Back to Home
+        </a>
+    </div>
+
+    <!-- Add New Worker button -->
+    <div class="mb-3">
+        <a class="btn btn-success"
+           th:href="@{'/workers/newWorker'(system=${systemSource})}">
+            Add New Worker
+        </a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name Surname</th>
+            <th>Telephone</th>
+            <th>Email</th>
+            <th>Person Type</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="w : ${workers}">
+            <td th:text="${w.workerId}"></td>
+
+            <!-- 🔴 HATALIYDI: th:text="${w.person.name} + ' ' + ${w.person.surname}" -->
+            <!-- ✅ DOĞRUSU: tek bir expression içinde yazılmalı -->
+            <td th:text="${w.person.name + ' ' + w.person.surname}"></td>
+
+            <td th:text="${w.person.tel}"></td>
+            <td th:text="${w.person.email}"></td>
+            <td th:text="${w.person.personType}"></td>
+            <td>
+                <!-- ✏ Edit -->
+                <!-- 🔴 Önceki: string birleştirme ile karışıktı -->
+                <!-- ✅ Thymeleaf path param stili -->
+                <a class="btn btn-sm btn-primary"
+                   th:href="@{/workers/edit/{id}(id=${w.workerId}, system=${systemSource})}">
+                    Edit
+                </a>
+
+                <!-- 🗑 Delete -->
+                <!-- Buradaki syntax aslında çalışır ama path-param versiyonunu kullanalım -->
+                <form th:action="@{/workers/{id}/delete(id=${w.workerId})}"
+                      method="post"
+                      style="display:inline;"
+                      onsubmit="return confirm('Are you sure you want to delete this worker?');">
+                    <input type="hidden" name="systemSource" th:value="${systemSource}"/>
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

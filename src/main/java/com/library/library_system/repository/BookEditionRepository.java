@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface BookEditionRepository extends JpaRepository<BookEdition, Integer> {
     // Dijital sistem için: editionNumber + publisher ile edition bulma
     Optional<BookEdition> findByEditionNumberAndPublisher(Integer editionNumber, String publisher);
+    // Yalnızca yayınevine göre aramak için ek:
+    Optional<BookEdition> findByPublisher(String publisher);
 }

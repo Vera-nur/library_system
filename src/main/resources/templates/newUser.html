@@ -40,10 +40,20 @@
         <h2>Add New User</h2>
         <hr/>
 
+        <div class="mb-3">
+            <a class="btn btn-secondary"
+               th:href="${systemSource == 'digital'} ? '/digital/worker/home' : '/library/worker/home'">
+                ← Back to Home
+            </a>
+        </div>
+
         <form th:action="@{/users/save}" th:object="${user}" method="post">
 
-            <!-- user_id (hidden) -->
+            <!-- Edit için user_id, personId (hidden) -->
             <input type="hidden" th:field="*{userId}"/>
+            <input type="hidden" th:field="*{person.id}">
+            <!-- systemSource (library/digital) saklı -->
+            <input type="hidden" name="systemSource" th:value="${systemSource}" />
 
             <!-- PERSON FIELDS -->
             <div class="mb-3">
@@ -78,7 +88,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-control"
+                <input type="text" class="form-control"
                        th:field="*{person.password}" required/>
             </div>
 

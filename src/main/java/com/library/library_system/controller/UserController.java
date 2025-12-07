@@ -21,21 +21,26 @@ public class UserController {
         this.personRepository = personRepository;
     }
 
-    // Liste (istersen sonra doldurursun)
-    @GetMapping("/list")
-    public String listUsers(Model model) {
+    // 🔹 1) Manage Users Page (Listeleme)
+    @GetMapping("/manage")
+    public String manageUsers(@RequestParam(required = false, defaultValue = "library") String system,
+                              Model model) {
+
         model.addAttribute("users", userRepository.findAll());
-        return "redirect:/digital/worker/home";
+        model.addAttribute("systemSource", system);   // library / digital
+        return "manageUsers";
     }
 
-    // ➕ NEW USER FORM
+    // 🔹 2) Yeni User Formu
     @GetMapping("/newUser")
-    public String showNewUserForm(@RequestParam(required = false, defaultValue = "library") String system, Model model) {
+    public String showNewUserForm(
+            @RequestParam(required = false, defaultValue = "library") String system,
+            Model model) {
 
         User user = new User();
 
         Person p = new Person();
-        p.setPersonType("user");
+        p.setPersonType("user");   // otomatik user
         user.setPerson(p);
 
         model.addAttribute("user", user);
@@ -43,35 +48,83 @@ public class UserController {
         return "newUser";
     }
 
-    // 💾 KAYDET
+    // 🔹 3) Kaydet (Hem Add hem Edit için)
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") User user, @RequestParam("systemSource") String systemSource) {
+    public String saveUser(@ModelAttribute("user") User user,
+                           @RequestParam("systemSource") String systemSource) {
 
-        // 1) önce Person kaydet
         Person person = user.getPerson();
-        // güvenlik için tekrar set edelim (biri formu kurcalarsa bile)
-        person.setPersonType("user");
-        Person savedPerson = personRepository.save(person);
 
-        // 2) user'a person set et ve kaydet
-        user.setPerson(savedPerson);
+        if (person.getId() != null) {
+            // EDIT MODU: Var olan person güncelleniyor
+            Integer personId = person.getId();
+
+            Person existing = personRepository.findById(personId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid person id: " + personId));
+
+            existing.setName(person.getName());
+            existing.setSurname(person.getSurname());
+            existing.setTel(person.getTel());
+            existing.setEmail(person.getEmail());
+            existing.setAddress(person.getAddress());
+            existing.setPassword(person.getPassword());
+            existing.setPersonType("user");
+
+            person = personRepository.save(existing);
+        } else {
+            // ADD MODU: Yeni person oluştur
+            person.setPersonType("user");
+            person = personRepository.save(person);
+        }
+
+        // User ile ilişkilendir ve kaydet
+        user.setPerson(person);
         userRepository.save(user);
 
-        // sonra ister /library/user/home, ister /digital/user/home'a çevirirsin
-        if ("digital".equals(systemSource)) {
-            return "redirect:/digital/worker/home";
-        } else {
-            return "redirect:/library/worker/home";
-        }
+        // Tek exit point → hem library hem digital için
+        return "redirect:/users/manage?system=" + systemSource;
     }
 
-    // ✏ EDIT (bonus)
+    // 🔹 4) Edit User (formu dolu aç)
     @GetMapping("/edit/{id}")
-    public String editUser(@PathVariable Integer id, Model model) {
+    public String editUser(@PathVariable Integer id,
+                           @RequestParam(required = false, defaultValue = "library") String system,
+                           Model model) {
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user id: " + id));
 
         model.addAttribute("user", user);
+        model.addAttribute("systemSource", system);
         return "newUser";   // aynı form edit için de kullanılıyor
+    }
+
+    // 🔹 5) Delete User + Person
+    @PostMapping("/{id}/delete")
+    public String deleteUser(@PathVariable Integer id,
+                             @RequestParam("systemSource") String systemSource) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user id: " + id));
+
+        Person person = user.getPerson();
+        Integer personId = (person != null ? person.getId() : null);
+
+        // Önce user'ı sil
+        userRepository.delete(user);
+
+        // Sonra bağlı person'ı sil
+        if (personId != null) {
+            personRepository.deleteById(personId);
+        }
+
+        return "redirect:/users/manage?system=" + systemSource;
+    }
+
+    // (İstersen bunu tamamen silebilirsin, manage sayfası varken çok gerek yok)
+    @GetMapping("/list")
+    public String listUsers(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "redirect:/digital/worker/home";
     }
 }

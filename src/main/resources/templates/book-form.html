@@ -32,98 +32,67 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Yeni Kitap Ekle</h1>
+                <h1 class="mt-4"
+                    th:text="${book.bookId} == null ? 'Add New Book' : 'Edit Book'">
+                    Yeni Kitap Ekle
+                </h1>
 
                 <div class="card mb-4">
                     <div class="card-body">
                         <form th:action="@{/books/save}" th:object="${book}" method="post">
+
+                            <!-- EDIT İÇİN GİZLİ ID -->
+                            <input type="hidden" th:field="*{bookId}"/>
+
+                            <!-- Kitap Adı -->
                             <div class="mb-3">
-                                <!-- Kitap Adı -->
-                                <div class="mb-3">
-                                    <label class="form-label">Kitap Adı</label>
-                                    <input type="text" class="form-control" th:field="*{bookName}" required>
-                                </div>
+                                <label class="form-label">Book Name</label>
+                                <input type="text" class="form-control" th:field="*{bookName}" required>
+                            </div>
 
-                                <!-- Stok -->
-                                <div class="mb-3">
-                                    <label class="form-label">Stok</label>
-                                    <input type="number" class="form-control" th:field="*{stock}" min="0">
-                                </div>
+                            <!-- Stok -->
+                            <div class="mb-3">
+                                <label class="form-label">Stock</label>
+                                <input type="number" class="form-control" th:field="*{stock}" min="0">
+                            </div>
 
-                                <!-- Yazar -->
-                                <div class="mb-3">
-                                    <label class="form-label">Yazar</label>
-                                    <select class="form-select" th:field="*{authorId}">
-                                        <option value="" disabled selected>Seçiniz...</option>
-                                        <option th:each="a : ${authors}"
-                                                th:value="${a.author_id}"
-                                                th:text="${a.author_name}">
-                                        </option>
-                                    </select>
-                                </div>
+                            <!-- Yazar -->
+                            <div class="mb-3">
+                                <label class="form-label">Author</label>
+                                <input type="text" class="form-control" th:field="*{authorName}" required>
+                            </div>
 
-                                <!-- Kategori -->
-                                <div class="mb-3">
-                                    <label class="form-label">Kategori</label>
-                                    <select class="form-select" th:field="*{categoryId}">
-                                        <option value="" disabled selected>Seçiniz...</option>
-                                        <option th:each="c : ${categories}"
-                                                th:value="${c.category_id}"
-                                                th:text="${c.category_name}">
-                                        </option>
-                                    </select>
-                                </div>
+                            <!-- Kategori -->
+                            <div class="mb-3">
+                                <label class="form-label">Category</label>
+                                <input type="text" class="form-control" th:field="*{categoryName}" required>
+                            </div>
 
-                                <!-- Dil -->
-                                <div class="mb-3">
-                                    <label class="form-label">Dil</label>
-                                    <select class="form-select" th:field="*{languageId}">
-                                        <option value="" disabled selected>Seçiniz...</option>
-                                        <option th:each="l : ${languages}"
-                                                th:value="${l.language_id}"
-                                                th:text="${l.language_name}">
-                                        </option>
-                                    </select>
-                                </div>
+                            <!-- Dil -->
+                            <div class="mb-3">
+                                <label class="form-label">Language</label>
+                                <input type="text" class="form-control" th:field="*{languageName}" required>
+                            </div>
 
-                                <!-- Lokasyon -->
-                                <div class="mb-3">
-                                    <label class="form-label">Lokasyon</label>
-                                    <select class="form-select" th:field="*{locationId}">
-                                        <option value="" disabled selected>Seçiniz...</option>
-                                        <option th:each="loc : ${locations}"
-                                                th:value="${loc.location_id}"
-                                                th:text="${loc.location_info}">
-                                        </option>
-                                    </select>
-                                </div>
+                            <!-- Lokasyon -->
+                            <div class="mb-3">
+                                <label class="form-label">Location</label>
+                                <input type="text" class="form-control" th:field="*{locationInfo}" required>
+                            </div>
 
-                                <!-- Baskı / Edition -->
-                                <div class="mb-3">
-                                    <label class="form-label">Baskı / Yayınevi</label>
-                                    <select class="form-select" th:field="*{editionId}">
-                                        <option value="" disabled selected>Seçiniz...</option>
-                                        <option th:each="e : ${editions}"
-                                                th:value="${e.editionId}"
-                                                th:text="${e.publisher}">
-                                        </option>
-                                    </select>
-                                </div>
+                            <!-- Baskı / Yayınevi -->
+                            <div class="mb-3">
+                                <label class="form-label">Edition/Publisher</label>
+                                <input type="text" class="form-control" th:field="*{editionPublisher}" required>
+                            </div>
 
-                                <!-- Durum / Status -->
-                                <div class="mb-3">
-                                    <label class="form-label">Durum</label>
-                                    <select class="form-select" th:field="*{statusId}">
-                                        <option value="" disabled selected>Seçiniz...</option>
-                                        <option th:each="s : ${statuses}"
-                                                th:value="${s.id}"
-                                                th:text="${s.description}">
-                                        </option>
-                                    </select>
-                                </div>
+                            <button type="submit" class="btn btn-success"
+                                    th:text="${book.bookId} == null ? 'Save' : 'Update'">
+                                Kaydet
+                            </button>
 
-                            <button type="submit" class="btn btn-success">Kaydet</button>
-                            <a th:href="@{/books}" class="btn btn-secondary">İptal</a>
+                            <a th:href="@{/books}" class="btn btn-secondary">Cancel</a>
+
                         </form>
                     </div>
                 </div>

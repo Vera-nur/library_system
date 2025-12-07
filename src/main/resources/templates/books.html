@@ -66,7 +66,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Kitaplar</h1>
+                <h1 class="mt-4">Books</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a th:href="@{/}">Ana Panel</a></li>
                     <li class="breadcrumb-item active">Kitaplar</li>
@@ -74,7 +74,7 @@
 
                 <div class="mb-3">
                     <a class="btn btn-primary" th:href="@{/books/new}">
-                        <i class="fas fa-plus"></i> Yeni Kitap Ekle
+                        <i class="fas fa-plus"></i> Add New Book
                     </a>
                 </div>
 
@@ -97,9 +97,12 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Kitap Adı</th>
-                                <th>Yazar</th>    <th>Kategori</th> <th>Tür</th>      <th>Stok</th>
-                                <th>İşlemler</th>
+                                <th>Book Name</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Stock</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -114,16 +117,25 @@
                                 <td th:text="${book.stock}"></td>
 
                                 <td>
+                                    <!-- Ödünç Ver / Stok Yok -->
                                     <a th:if="${book.stock > 0}"
                                        th:href="@{'/library/borrow/book/' + ${book.bookId}}"
                                        class="btn btn-sm btn-success">
-                                        <i class="fas fa-hand-holding"></i> Ödünç Ver
+                                        <i class="fas fa-hand-holding"></i> Borrow
                                     </a>
 
                                     <button th:unless="${book.stock > 0}"
                                             class="btn btn-sm btn-secondary" disabled>
-                                        <i class="fas fa-ban"></i> Stok Yok
+                                        <i class="fas fa-ban"></i> Out of Stock
                                     </button>
+
+                                    <!-- EDIT BUTONU -->
+                                    <a th:href="@{'/books/' + ${book.bookId} + '/edit'}"
+                                       class="btn btn-sm btn-primary">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+
+                                    <!-- SİLME -->
                                     <form th:action="@{'/books/' + ${book.bookId} + '/delete'}" method="post"
                                           onsubmit="return confirm('Silmek istediğine emin misin?');" style="display:inline;">
                                         <button type="submit" class="btn btn-sm btn-danger">

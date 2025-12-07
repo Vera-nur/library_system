@@ -1,3 +1,4 @@
+// BookFormDTO.java
 package com.library.library_system.dto;
 
 import lombok.Data;
@@ -9,10 +10,9 @@ public class BookFormDTO {
     private String bookName;
     private Integer stock;
 
-    private Integer categoryId;
-    private Integer authorId;
-    private Integer languageId;
-    private Integer locationId;
-    private Integer editionId;
-    private Integer statusId;    // Rafta / Ödünçte / Rezerve
+    private String authorName;
+    private String categoryName;
+    private String languageName;
+    private String locationInfo;
+    private String editionPublisher;
 }

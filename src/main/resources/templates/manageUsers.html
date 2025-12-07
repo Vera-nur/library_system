@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users</title>
+    <link href="/css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Manage Users</h2>
+    <hr/>
+
+    <!-- Back to Home -->
+    <div class="mb-3">
+        <a class="btn btn-secondary"
+           th:href="${systemSource == 'digital'} ? '/digital/worker/home' : '/library/worker/home'">
+            ← Back to Home
+        </a>
+    </div>
+
+    <!-- Add New User -->
+    <div class="mb-3">
+        <a class="btn btn-success"
+           th:href="@{'/users/newUser'(system=${systemSource})}">
+            Add New User
+        </a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name Surname</th>
+            <th>Telephone</th>
+            <th>Email</th>
+            <th>Person Type</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.userId}"></td>
+
+            <!-- Önemli düzeltme: tek expression içinde concat -->
+            <td th:text="${u.person.name + ' ' + u.person.surname}"></td>
+
+            <td th:text="${u.person.tel}"></td>
+            <td th:text="${u.person.email}"></td>
+            <td th:text="${u.person.personType}"></td>
+            <td>
+                <!-- Edit linki: parametreleri Thymeleaf style ile veriyoruz -->
+                <a class="btn btn-sm btn-primary"
+                   th:href="@{/users/edit/{id}(id=${u.userId}, system=${systemSource})}">
+                    Edit
+                </a>
+
+                <!-- Delete -->
+                <form th:action="@{/users/{id}/delete(id=${u.userId})}"
+                      method="post"
+                      style="display:inline;"
+                      onsubmit="return confirm('Are you sure you want to delete this user?');">
+                    <input type="hidden" name="systemSource" th:value="${systemSource}"/>
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

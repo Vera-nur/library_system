@@ -40,23 +40,21 @@ public class BookController {
     public String showCreateForm(Model model) {
         // Book yerine DTO gönderiyoruz
         model.addAttribute("book", new BookFormDTO());
+        return "book-form";
+    }
 
-        model.addAttribute("authors", authorRepository.findAll());
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("languages", bookLanguageRepository.findAll());
-        model.addAttribute("locations", locationRepository.findAll());
-        model.addAttribute("editions", bookEditionRepository.findAll());
-
-        model.addAttribute("statuses",
-                parameterRepository.findByParameterDef_Id(1));
-
+    // --- EDİT KİTAP FORMU ---
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Integer id, Model model) {
+        BookFormDTO dto = bookService.getBookFormById(id);
+        model.addAttribute("book", dto);
         return "book-form";
     }
 
     // --- 3. KAYDETME ---
     @PostMapping("/save")
     public String createBook(@ModelAttribute("book") BookFormDTO dto) {
-        bookService.createBook(dto);   // birazdan yazacağız
+        bookService.saveBook(dto);   // create + update
         return "redirect:/books";
     }
 

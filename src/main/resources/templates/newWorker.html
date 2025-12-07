@@ -9,13 +9,27 @@
 <body>
 
 <div class="container mt-5">
-    <h2>Add / Edit Worker</h2>
+    <h2>Add New Worker</h2>
     <hr/>
+
+    <div class="mb-3">
+        <a class="btn btn-secondary"
+           th:href="${systemSource == 'digital'} ? '/digital/worker/home' : '/library/worker/home'">
+            ← Back to Home
+        </a>
+    </div>
 
     <form th:action="@{/workers/save}" th:object="${worker}" method="post">
 
-        <!-- Hidden Worker ID -->
+        <!-- Worker ID (edit için) -->
         <input type="hidden" th:field="*{workerId}" />
+
+        <!-- Person ID (edit için ÇOK önemli) -->
+        <input type="hidden" th:field="*{person.id}" />
+
+        <!-- systemSource (library / digital) -->
+        <input type="hidden" name="systemSource" th:value="${systemSource}" />
+
 
         <!-- PERSON FIELDS -->
 
