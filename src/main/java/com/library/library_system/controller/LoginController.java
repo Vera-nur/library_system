@@ -114,7 +114,7 @@ public class LoginController {
                 return "redirect:/library/user/home";
             } else {
                 // Dijital User home
-                return "redirect:/digital-user-home";
+                return "redirect:/digital/user/home";
             }
 
 
