@@ -1,12 +1,18 @@
 package com.library.library_system.controller;
 
+import com.library.library_system.entity.AccessLog;
 import com.library.library_system.entity.Person;
 import com.library.library_system.entity.Worker;
+import com.library.library_system.repository.AccessLogRepository;
 import com.library.library_system.repository.PersonRepository;
 import com.library.library_system.repository.WorkerRepository;
+import com.library.library_system.service.LogService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/workers")
@@ -14,11 +20,18 @@ public class WorkerController {
 
     private final WorkerRepository workerRepository;
     private final PersonRepository personRepository;
+    private final LogService logService;
+    private final AccessLogRepository accessLogRepository;
 
+    // Constructor Injection
     public WorkerController(WorkerRepository workerRepository,
-                            PersonRepository personRepository) {
+                            PersonRepository personRepository,
+                            LogService logService,
+                            AccessLogRepository accessLogRepository) {
         this.workerRepository = workerRepository;
         this.personRepository = personRepository;
+        this.logService = logService;
+        this.accessLogRepository = accessLogRepository;
     }
 
     // 🔹 0) Manage Workers Page (List + Add/Edit/Delete)
@@ -38,7 +51,6 @@ public class WorkerController {
             Model model) {
 
         Worker worker = new Worker();
-
         Person p = new Person();
         p.setPersonType("worker");  // otomatik worker
         worker.setPerson(p);
@@ -51,11 +63,13 @@ public class WorkerController {
     // 🔹 2) Save (Add + Edit için ortak)
     @PostMapping("/save")
     public String saveWorker(@ModelAttribute("worker") Worker worker,
-                             @RequestParam("systemSource") String systemSource) {
+                             @RequestParam("systemSource") String systemSource,
+                             HttpSession session) {
 
         Person person = worker.getPerson();
+        boolean isNew = (person.getId() == null); // Yeni kayıt mı kontrolü
 
-        if (person != null && person.getId() != null) {
+        if (!isNew) {
             // EDIT MODU → var olan Person güncelleniyor
             Integer personId = person.getId();
 
@@ -82,6 +96,19 @@ public class WorkerController {
 
         worker.setPerson(person);
         workerRepository.save(worker);
+
+        // --- LOGLAMA İŞLEMİ ---
+        try {
+            // Sadece YENİ ekleme işleminde log tutuyoruz
+            if (isNew) {
+                Integer currentAdminId = (Integer) session.getAttribute("workerId");
+                if (currentAdminId != null) {
+                    logService.log("create_worker", null, currentAdminId);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Loglama hatası: " + e.getMessage());
+        }
 
         return "redirect:/workers/manage?system=" + systemSource;
     }
@@ -120,5 +147,15 @@ public class WorkerController {
         }
 
         return "redirect:/workers/manage?system=" + systemSource;
+    }
+
+    // 🔹 5) Activity Log Sayfası (Stash'ten geldi)
+    @GetMapping("/activity-log")
+    public String showActivityLog(Model model) {
+        // Logları çekip HTML'e gönderiyoruz
+        List<AccessLog> logs = accessLogRepository.findAllByOrderByCreatedAtDesc();
+        model.addAttribute("logs", logs);
+
+        return "activity-log"; // HTML dosyasının adı
     }
 }

@@ -11,6 +11,8 @@ public interface ParameterRepository extends JpaRepository<Parameter, Integer> {
     // KÜTÜPHANE: Bir grup içindeki TÜM parametreleri çekmek için (ör: BOOK_STATUS listesi)
     List<Parameter> findByParameterDef_Id(Integer parameterDefId);
 
+    Parameter findByValue(String value);
+
     // DİJİTAL: Belirli bir grup + value ile TEK parametre bulmak için
     // ör: ( "BOOK_STATUS", "AVAILABLE" )
     Optional<Parameter> findByParameterDef_NameAndValue(String defName, String value);

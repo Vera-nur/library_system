@@ -4,6 +4,8 @@ import com.library.library_system.entity.Person;
 import com.library.library_system.entity.User;
 import com.library.library_system.repository.PersonRepository;
 import com.library.library_system.repository.UserRepository;
+import com.library.library_system.service.LogService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +16,13 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final PersonRepository personRepository;
+    private final LogService logService;
 
     public UserController(UserRepository userRepository,
-                          PersonRepository personRepository) {
+                          PersonRepository personRepository, LogService logService) {
         this.userRepository = userRepository;
         this.personRepository = personRepository;
+        this.logService = logService;
     }
 
     // 🔹 1) Manage Users Page (Listeleme)
@@ -51,11 +55,13 @@ public class UserController {
     // 🔹 3) Kaydet (Hem Add hem Edit için)
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("user") User user,
-                           @RequestParam("systemSource") String systemSource) {
+                           @RequestParam("systemSource") String systemSource,
+                           HttpSession session) {
 
         Person person = user.getPerson();
+        boolean isNew = (person.getId() == null); // Yeni kayıt mı kontrolü
 
-        if (person.getId() != null) {
+        if (!isNew) {
             // EDIT MODU: Var olan person güncelleniyor
             Integer personId = person.getId();
 
@@ -81,7 +87,20 @@ public class UserController {
         user.setPerson(person);
         userRepository.save(user);
 
-        // Tek exit point → hem library hem digital için
+        // --- LOGLAMA İŞLEMİ (Stashed Changes'den alındı) ---
+        try {
+            // Sadece YENİ ekleme işleminde log tutuyoruz
+            if (isNew) {
+                Integer currentWorkerId = (Integer) session.getAttribute("workerId");
+                if (currentWorkerId != null) {
+                    logService.log("create_user", user.getUserId(), currentWorkerId);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Loglama sırasında hata: " + e.getMessage());
+        }
+
+        // Yönlendirme: Listeye geri dön (Upstream'deki mantık daha temiz)
         return "redirect:/users/manage?system=" + systemSource;
     }
 
