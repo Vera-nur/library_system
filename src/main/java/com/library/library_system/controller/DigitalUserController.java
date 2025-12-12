@@ -84,7 +84,7 @@ public class DigitalUserController {
             Parameter downloadType = parameterRepository
                     .findByParameterDef_NameAndValue("DIGITAL_ACCESS_TYPE", "DOWNLOAD")
                     .orElseThrow(() -> new IllegalStateException(
-                            "DIGITAL_ACCESS_TYPE / DOWNLOAD parametresi bulunamadı"));
+                            "The DIGITAL_ACCESS_TYPE / DOWNLOAD parameter was not found."));
 
             DigitalBookAccessLog log = new DigitalBookAccessLog();
             log.setDigitalBook(book);
@@ -105,7 +105,7 @@ public class DigitalUserController {
 
         Object obj = session.getAttribute("loggedUser");
         if (obj == null) {
-            throw new IllegalStateException("Oturumda kullanıcı yok (loggedUser).");
+            throw new IllegalStateException("No user logged in.");
         }
 
         User user;
@@ -114,9 +114,9 @@ public class DigitalUserController {
         } else if (obj instanceof Person p) {
             user = userRepository.findByPerson(p)
                     .orElseThrow(() -> new IllegalStateException(
-                            "Bu kişiye bağlı User kaydı bulunamadı."));
+                            "No user record was found for this person.."));
         } else {
-            throw new IllegalStateException("loggedUser tipi beklenmeyen bir tip.");
+            throw new IllegalStateException("The loggedUser type is an unexpected type.");
         }
 
         model.addAttribute("logs",

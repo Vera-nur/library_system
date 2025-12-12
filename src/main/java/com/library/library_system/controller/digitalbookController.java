@@ -96,7 +96,7 @@ public class digitalbookController {
 
             Worker worker = (Worker) session.getAttribute("loggedWorker");
             if (worker == null) {
-                throw new IllegalStateException("Worker oturumu bulunamadı! Önce worker olarak giriş yap.");
+                throw new IllegalStateException("Worker session not found! Please log in as a worker first.");
             }
 
 
@@ -104,7 +104,7 @@ public class digitalbookController {
             Parameter addType = parameterRepository
                     .findByParameterDef_NameAndValue("DIGITAL_ACCESS_TYPE", "ADD")
                     .orElseThrow(() ->
-                            new IllegalStateException("DIGITAL_ACCESS_TYPE / ADD parametresi bulunamadı"));
+                            new IllegalStateException("DIGITAL_ACCESS_TYPE /ADD parameter not found."));
 
             DigitalBookAccessLog log = new DigitalBookAccessLog();
             log.setDigitalBook(savedBook);
@@ -115,7 +115,7 @@ public class digitalbookController {
 
             digitalAccessLogRepository.save(log);
 
-            System.out.println(">>> ACCESS LOG KAYDEDİLDİ, logId henüz yok (auto-id)");
+            System.out.println(">>> Access log recorded, log ID not yet available (auto-id)");
         }
 
         return "redirect:/digital/worker/home";
@@ -160,7 +160,7 @@ public class digitalbookController {
     private Category getOrCreateCategory(String name) {
         String trimmed = name == null ? null : name.trim();
         if (trimmed == null || trimmed.isEmpty()) {
-            throw new IllegalArgumentException("Category name boş olamaz");
+            throw new IllegalArgumentException("Category name can not be empty");
         }
 
         return categoryRepository.findByCategory_name(trimmed)
@@ -174,7 +174,7 @@ public class digitalbookController {
     private Author getOrCreateAuthor(String name) {
         String trimmed = name == null ? null : name.trim();
         if (trimmed == null || trimmed.isEmpty()) {
-            throw new IllegalArgumentException("Author name boş olamaz");
+            throw new IllegalArgumentException("Author name can not be empty");
         }
 
         return authorRepository.findByAuthor_name(trimmed)
@@ -188,7 +188,7 @@ public class digitalbookController {
     private BookLanguage getOrCreateLanguage(String name) {
         String trimmed = name == null ? null : name.trim();
         if (trimmed == null || trimmed.isEmpty()) {
-            throw new IllegalArgumentException("Language name boş olamaz");
+            throw new IllegalArgumentException("Language name can not be empty");
         }
 
         return bookLanguageRepository.findByLanguage_name(trimmed)

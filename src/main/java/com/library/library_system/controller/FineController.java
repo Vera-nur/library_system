@@ -22,11 +22,11 @@ public class FineController {
     @GetMapping("/late-books")
     public String listLateBooks(Model model) {
         // Veritabanından durumu "Gecikmiş" olanları çekiyoruz
-        List<BorrowDetailsView> lateBooks = borrowViewRepository.findByStatus("Gecikmis");
+        List<BorrowDetailsView> lateBooks = borrowViewRepository.findByStatus("Overdue");
 
         // Eğer liste boşsa kullanıcıya bilgi vermek için
         if (lateBooks.isEmpty()) {
-            model.addAttribute("message", "Şu anda gecikmiş veya cezalı kitap bulunmuyor.");
+            model.addAttribute("message", "There are currently no overdue or fined books.");
         }
 
         model.addAttribute("lateBooks", lateBooks);

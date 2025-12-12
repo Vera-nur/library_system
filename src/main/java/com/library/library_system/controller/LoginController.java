@@ -37,8 +37,8 @@ public class LoginController {
         model.addAttribute("system", system); // digital / library
         model.addAttribute("role", role);     // user / worker
 
-        String systemText = "digital".equals(system) ? "Dijital Sistem" : "Kütüphane Sistemi";
-        String roleText = "worker".equals(role) ? "Çalışan Girişi" : "Kullanıcı Girişi";
+        String systemText = "digital".equals(system) ? "Digital System" : "Library System";
+        String roleText = "worker".equals(role) ? "Worker Login" : "Employee Login";
 
         model.addAttribute("loginTitle", systemText + " - " + roleText);
 
@@ -69,7 +69,7 @@ public class LoginController {
         Optional<Person> optPerson = personRepository.findByEmail(email);
 
         if (optPerson.isEmpty()) {
-            model.addAttribute("error", "Bu e-posta ile kayıtlı kişi bulunamadı.");
+            model.addAttribute("error", "The person registered with this email address has been selected.");
             return showLogin(system, role, model);
         }
 
@@ -78,7 +78,7 @@ public class LoginController {
 
         // 2) Şifre kontrolü
         if (!person.getPassword().equals(password)) {
-            model.addAttribute("error", "Şifre hatalı.");
+            model.addAttribute("error", "Wrong password");
             return showLogin(system, role, model);
         }
 
@@ -90,13 +90,13 @@ public class LoginController {
 
             if (!"user".equals(role)) {
                 model.addAttribute("error",
-                        "Bu hesap kullanıcı hesabı. Lütfen kullanıcı girişi ekranını kullanın.");
+                        "This is a user account. Please use the user login screen.");
                 return showLogin(system, role, model);
             }
 
             Optional<User> optUser = userRepository.findByPerson(person);
             if (optUser.isEmpty()) {
-                model.addAttribute("error", "Bu kişi için kullanıcı kaydı bulunamadı.");
+                model.addAttribute("error", "No user record was found for this person.");
                 return showLogin(system, role, model);
             }
             // 🔹 Session'a userId yaz
@@ -122,13 +122,13 @@ public class LoginController {
 
             if (!"worker".equals(role)) {
                 model.addAttribute("error",
-                        "Bu hesap çalışan hesabı. Lütfen çalışan girişi ekranını kullanın.");
+                        "This is an employee account. Please use the employee login screen.");
                 return showLogin(system, role, model);
             }
 
             Optional<Worker> optWorker = workerRepository.findByPerson(person);
             if (optWorker.isEmpty()) {
-                model.addAttribute("error", "Bu kişi için çalışan kaydı bulunamadı.");
+                model.addAttribute("error", "No employee record was found for this person.");
                 return showLogin(system, role, model);
             }
 
@@ -149,7 +149,7 @@ public class LoginController {
 
 
         } else {
-            model.addAttribute("error", "Bu kişinin tipi (person_type) geçersiz: " + personType);
+            model.addAttribute("error", "This person's type (person_type) is invalid: " + personType);
             return showLogin(system, role, model);
         }
     }

@@ -77,7 +77,7 @@ public class BorrowController {
             String trimmed = name.trim();
             borrows = borrowViewRepository.findByFullNameContainingIgnoreCase(trimmed);
             if (borrows.isEmpty()) {
-                model.addAttribute("infoMessage", "“" + trimmed + "” adına ait aktif ödünç kaydı bulunamadı.");
+                model.addAttribute("infoMessage", "“" + trimmed + "” no active loan records were found under that name..");
             }
             model.addAttribute("name", trimmed);
         } else {
