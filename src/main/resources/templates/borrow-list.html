@@ -2,7 +2,7 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Ödünç İşlemleri</title>
+    <title>Borrowing</title>
 
     <!-- SB Admin / Bootstrap CSS -->
     <link href="/css/styles.css" rel="stylesheet"/>
@@ -176,30 +176,30 @@
                                     <span class="badge-status"
                                           th:text="${borrow.status}"
                                           th:classappend="${borrow.status == 'Gecikmis'} ? ' bg-danger text-white' : ' bg-success text-white'">
-                                        Ödünçte
+                                        Borrowed
                                     </span>
                                 </td>
 
                                 <td class="text-end">
 
-                                    <form th:if="${borrow.status == 'Ödünçte'}"
+                                    <form th:if="${borrow.status == 'Borrowed'}"
                                           th:action="@{/library/borrow/return/{id}(id=${borrow.borrowBookId})}"
                                           method="post" class="d-inline">
                                         <button type="submit"
                                                 class="btn btn-sm btn-outline-primary"
-                                                onclick="return confirm('Bu kitabı teslim almak istiyor musunuz?');">
+                                                onclick="return confirm('Do you want to receive this book?');">
                                             <i class="fa-solid fa-arrow-rotate-left me-1"></i>
-                                            Teslim Al
+                                            Receive Book
                                         </button>
                                     </form>
 
-                                    <div th:if="${borrow.status == 'Gecikmis'}">
+                                    <div th:if="${borrow.status == 'Overdue'}">
                                         <span class="badge bg-warning text-dark">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
-                                            Ceza: <span th:text="${borrow.estimatedFine} + ' TL'"></span>
+                                            Fine: <span th:text="${borrow.estimatedFine} + ' TL'"></span>
                                         </span>
                                         <a th:href="@{/library/fines/late-books}" class="btn btn-sm btn-danger mt-1">
-                                            Ödeme Ekranına Git
+                                            Go to Payment Page
                                         </a>
                                     </div>
 
@@ -209,7 +209,7 @@
                             <!-- Kayıt yoksa -->
                             <tr th:if="${#lists.isEmpty(borrows)}">
                                 <td colspan="6" class="text-center py-4">
-                                    Henüz ödünç verilmiş kitap kaydı bulunmuyor.
+                                    There are no borrowed book records yet.
                                 </td>
                             </tr>
                             </tbody>
@@ -222,7 +222,7 @@
 
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
-                <div class="text-muted small">© 2025 Kütüphane Sistemi</div>
+                <div class="text-muted small">© 2025 Library System</div>
             </div>
         </footer>
     </div>

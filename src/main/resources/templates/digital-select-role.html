@@ -2,7 +2,7 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Dijital Kitap Sistemi - Rol Seçimi</title>
+    <title>Digital Book System - Role Selection</title>
     <link href="/css/styles.css" rel="stylesheet"/>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
@@ -27,7 +27,6 @@
             text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
         }
 
-        /* Kart tasarımı */
         .card {
             background: rgba(255, 255, 255, 0.80);
             backdrop-filter: blur(8px);
@@ -35,7 +34,7 @@
             height: 100%;
         }
 
-        /* Kart içeriğini dikey ortalama + buton hizalama */
+
         .card-body {
             display: flex;
             flex-direction: column;
@@ -43,7 +42,7 @@
             height: 100%;
         }
 
-        /* Siyah butonlar */
+
         .btn-black {
             background-color: black;
             color: white;
@@ -57,13 +56,12 @@
             color: #fff;
         }
 
-        /* Navbar tamamen şeffaf olsun */
 .navbar {
     background-color: transparent !important;
-    box-shadow: none !important;  /* gölgeyi de kaldırır */
+    box-shadow: none !important;
 }
 
-/* Navbar içindeki yazı beyaz görünsün */
+
 .navbar-brand {
     color: white !important;
     font-weight: 600;
@@ -75,13 +73,13 @@
 
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand ps-3" th:href="@{/}">Kütüphane Sistemi</a>
+    <a class="navbar-brand ps-3" th:href="@{/}">Library System</a>
 </nav>
 
 <div class="container text-center">
 
-    <h2 class="page-title mb-3">Dijital Kitap Sistemi</h2>
-    <p class="page-subtitle mb-5">Lütfen rolünüzü seçin.</p>
+    <h2 class="page-title mb-3">Digital Book System</h2>
+    <p class="page-subtitle mb-5">Please choose your role.</p>
 
     <div class="row justify-content-center">
 
@@ -89,12 +87,12 @@
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
                 <div class="card-body text-center">
-                    <h4>Kullanıcı Girişi</h4>
-                    <p>E-kitaplara erişen normal kullanıcılar.</p>
+                    <h4> User Login</h4>
+                    <p>Regular users who access e-books.</p>
 
                     <a class="btn btn-black"
                        th:href="@{/login(system='digital', role='user')}">
-                        Kullanıcı Girişi
+                        User Login
                     </a>
                 </div>
             </div>
@@ -104,12 +102,12 @@
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
                 <div class="card-body text-center">
-                    <h4>Çalışan Girişi</h4>
-                    <p>Dijital sistemde görevli çalışanlar.</p>
+                    <h4>Employee Login</h4>
+                    <p>Employees working in the digital system.</p>
 
                     <a class="btn btn-black"
                        th:href="@{/login(system='digital', role='worker')}">
-                        Çalışan Girişi
+                        Employee Login
                     </a>
                 </div>
             </div>

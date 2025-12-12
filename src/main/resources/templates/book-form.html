@@ -2,7 +2,7 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
-    <title>Yeni Kitap - Kütüphane</title>
+    <title>New Book- Library</title>
 
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="/css/styles.css" rel="stylesheet" />
@@ -11,7 +11,7 @@
 <body class="sb-nav-fixed">
 
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand ps-3" th:href="@{/library/worker/home}">Kütüphane</a>
+    <a class="navbar-brand ps-3" th:href="@{/library/worker/home}">Library</a>
 </nav>
 
 <div id="layoutSidenav">
@@ -19,10 +19,10 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <div class="sb-sidenav-menu-heading">KÜTÜPHANE</div>
+                    <div class="sb-sidenav-menu-heading">LIBRARY</div>
                     <a class="nav-link active" th:href="@{/books}">
                         <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
-                        Kitaplar
+                        Books
                     </a>
                 </div>
             </div>
@@ -34,7 +34,7 @@
             <div class="container-fluid px-4">
                 <h1 class="mt-4"
                     th:text="${book.bookId} == null ? 'Add New Book' : 'Edit Book'">
-                    Yeni Kitap Ekle
+                    Add New Book
                 </h1>
 
                 <div class="card mb-4">
@@ -88,7 +88,7 @@
 
                             <button type="submit" class="btn btn-success"
                                     th:text="${book.bookId} == null ? 'Save' : 'Update'">
-                                Kaydet
+                                Save
                             </button>
 
                             <a th:href="@{/books}" class="btn btn-secondary">Cancel</a>
@@ -103,7 +103,7 @@
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Kütüphane Sistemi 2025</div>
+                    <div class="text-muted">Copyright &copy; Library System 2025</div>
                 </div>
             </div>
         </footer>

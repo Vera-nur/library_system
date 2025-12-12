@@ -2,7 +2,7 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
-    <title>Ödünç Ver</title>
+    <title>Borrow Book</title>
 
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="/css/styles.css" rel="stylesheet" />
@@ -13,7 +13,7 @@
 
 <!-- NAVBAR -->
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand ps-3" th:href="@{/library/worker/home}">Kütüphane</a>
+    <a class="navbar-brand ps-3" th:href="@{/library/worker/home}">Library</a>
 </nav>
 
 
@@ -26,23 +26,23 @@
             <div class="sb-sidenav-menu">
                 <div class="nav">
 
-                    <div class="sb-sidenav-menu-heading">GENEL</div>
+                    <div class="sb-sidenav-menu-heading">GENERAL</div>
 
                     <a class="nav-link" th:href="@{/library/worker/home}">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        Ana Panel
+                        Main Dashboard
                     </a>
 
-                    <div class="sb-sidenav-menu-heading">KÜTÜPHANE</div>
+                    <div class="sb-sidenav-menu-heading">LIBRARY</div>
 
                     <a class="nav-link" th:href="@{/books}">
                         <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
-                        Kitaplar
+                        Books
                     </a>
 
                     <a class="nav-link active" th:href="@{/library/borrow/list}">
                         <div class="sb-nav-link-icon"><i class="fas fa-hand-holding"></i></div>
-                        Ödünç İşlemleri
+                        Borrowing
                     </a>
 
                 </div>
@@ -55,17 +55,17 @@
     <div id="layoutSidenav_content">
         <main class="container-fluid px-4">
 
-            <h2 class="mt-4">Ödünç Verme İşlemi</h2>
+            <h2 class="mt-4">Borrowing Transaction</h2>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item"><a th:href="@{/library/worker/home}">Ana Panel</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/books}">Kitaplar</a></li>
-                <li class="breadcrumb-item active">Ödünç Ver</li>
+                <li class="breadcrumb-item"><a th:href="@{/library/worker/home}">Main Panel</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/books}">Books</a></li>
+                <li class="breadcrumb-item active">Borrow Book</li>
             </ol>
 
             <div class="card shadow-sm col-md-6">
 
                 <div class="card-header">
-                    <strong>Kitabı ödünç vereceğiniz kullanıcıyı seçin</strong>
+                    <strong>Choose the user you want to lend the book to</strong>
                 </div>
 
                 <div class="card-body">
@@ -76,9 +76,9 @@
                         <input type="hidden" name="bookId" th:value="${bookId}" />
 
                         <div class="mb-3">
-                            <label class="form-label">Kullanıcı Seçiniz</label>
+                            <label class="form-label">Select User</label>
                             <select name="userId" class="form-select" required>
-                                <option value="">Seçiniz...</option>
+                                <option value="">Choose...</option>
                                 <option th:each="user : ${users}"
                                         th:value="${user.userId}"
                                         th:text="${user.person.name + ' ' + user.person.surname}">
@@ -87,7 +87,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-check"></i> İşlemi Tamamla
+                            <i class="fas fa-check"></i> Complete Transaction
                         </button>
 
                     </form>
@@ -101,7 +101,7 @@
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright © Kütüphane Sistemi 2025</div>
+                    <div class="text-muted">Copyright © Library System 2025</div>
                 </div>
             </div>
         </footer>

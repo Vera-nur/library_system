@@ -42,20 +42,18 @@
         <tr th:each="u : ${users}">
             <td th:text="${u.userId}"></td>
 
-            <!-- Önemli düzeltme: tek expression içinde concat -->
             <td th:text="${u.person.name + ' ' + u.person.surname}"></td>
 
             <td th:text="${u.person.tel}"></td>
             <td th:text="${u.person.email}"></td>
             <td th:text="${u.person.personType}"></td>
             <td>
-                <!-- Edit linki: parametreleri Thymeleaf style ile veriyoruz -->
+
                 <a class="btn btn-sm btn-primary"
                    th:href="@{/users/edit/{id}(id=${u.userId}, system=${systemSource})}">
                     Edit
                 </a>
 
-                <!-- Delete -->
                 <form th:action="@{/users/{id}/delete(id=${u.userId})}"
                       method="post"
                       style="display:inline;"

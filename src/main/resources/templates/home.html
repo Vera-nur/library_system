@@ -2,12 +2,11 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
-    <title>Kütüphane Sistemi - Giriş</title>
+    <title>Library System - Log In</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
-    <!-- 🔥 ARKA PLAN + NAVBAR STİLİ -->
     <style>
         body {
             background-image: url('/assets/img/library_b.jpeg');
@@ -18,7 +17,6 @@
             min-height: 100vh;
         }
 
-        /* Navbar tamamen şeffaf olsun */
         .navbar {
             background-color: transparent !important;
             box-shadow: none;
@@ -30,7 +28,6 @@
             font-weight: 600;
         }
 
-        /* Kartların görünürlüğü için saydam beyaz arka plan + blur */
         .card {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(8px);
@@ -49,13 +46,13 @@
         .card-body {
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* üst yazılar ve buton arası boşluk sabit */
+            justify-content: space-between;
             height: 100%;
-            padding-bottom: 30px; /* butonun konumu dengeli görünsün */
+            padding-bottom: 30px;
         }
 
         .card-body a.btn {
-            align-self: center; /* butonu ortalar */
+            align-self: center;
         }
     </style>
 
@@ -65,33 +62,33 @@
 
 <nav class="navbar navbar-dark">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Kütüphane Sistemi</span>
+        <span class="navbar-brand mb-0 h1">Library System</span>
     </div>
 </nav>
 
 <div class="container mt-5">
     <div class="row justify-content-center mb-4">
         <div class="col-md-8 text-center">
-            <h1 style="color: white;">Hoş geldiniz</h1>
+            <h1 style="color: white;">Welcome</h1>
             <p class="lead" style="color: white;">
-                Lütfen giriş yapmak istediğiniz sistemi seçin.
+                Please select the system you wish to log in with.
             </p>
         </div>
     </div>
 
     <div class="row justify-content-center">
-        <!-- Dijital Kitap Sistemi -->
+
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow">
                 <div class="card-body text-center">
-                    <h3 class="card-title mb-3">Dijital Kitap Sistemi</h3>
+                    <h3 class="card-title mb-3">Digital Book System</h3>
                     <p class="card-text">
-                        E-kitaplara erişim, dijital okuma ve erişim logları.
+                        E-book access, digital reading, and access logs.
                     </p>
                     <a class="btn btn-primary btn-lg"
                        style="background-color: black; color: white; border-color: black;"
                        th:href="@{/digital/select-role}">
-                        Dijital Sisteme Giriş
+                        Login to Digital System
                     </a>
                 </div>
             </div>
@@ -101,14 +98,14 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow">
                 <div class="card-body text-center">
-                    <h3 class="card-title mb-3">Kütüphane Sistemi</h3>
+                    <h3 class="card-title mb-3">Library System</h3>
                     <p class="card-text">
-                        Fiziksel kitap ödünç verme, iade, rezervasyon ve cezalar.
+                        The system supports physical book borrowing, returns, reservations, and fine management.
                     </p>
                     <a class="btn btn-success btn-lg"
                        style="background-color: black; color: white; border-color: black;"
                        th:href="@{/library/select-role}">
-                        Kütüphane Sistemine Giriş
+                        Log In to Library System
                     </a>
                 </div>
             </div>

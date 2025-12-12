@@ -68,8 +68,8 @@
             <div class="container-fluid px-4">
                 <h1 class="mt-4">Books</h1>
                 <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item"><a th:href="@{/}">Ana Panel</a></li>
-                    <li class="breadcrumb-item active">Kitaplar</li>
+                    <li class="breadcrumb-item"><a th:href="@{/}">Main Panel</a></li>
+                    <li class="breadcrumb-item active">Books</li>
                 </ol>
 
                 <div class="mb-3">
@@ -90,7 +90,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-book me-1"></i>
-                        Tüm Kitaplar
+                        All Books
                     </div>
                     <div class="card-body">
                         <table id="datatablesSimple">
@@ -117,7 +117,6 @@
                                 <td th:text="${book.stock}"></td>
 
                                 <td>
-                                    <!-- Ödünç Ver / Stok Yok -->
                                     <a th:if="${book.stock > 0}"
                                        th:href="@{'/library/borrow/book/' + ${book.bookId}}"
                                        class="btn btn-sm btn-success">
@@ -129,15 +128,13 @@
                                         <i class="fas fa-ban"></i> Out of Stock
                                     </button>
 
-                                    <!-- EDIT BUTONU -->
                                     <a th:href="@{'/books/' + ${book.bookId} + '/edit'}"
                                        class="btn btn-sm btn-primary">
                                         <i class="fas fa-pen"></i>
                                     </a>
 
-                                    <!-- SİLME -->
                                     <form th:action="@{'/books/' + ${book.bookId} + '/delete'}" method="post"
-                                          onsubmit="return confirm('Silmek istediğine emin misin?');" style="display:inline;">
+                                          onsubmit="return confirm('Are you sure you want to delete it?');" style="display:inline;">
                                         <button type="submit" class="btn btn-sm btn-danger">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
@@ -155,11 +152,11 @@
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Kütüphane Sistemi 2025</div>
+                    <div class="text-muted">Copyright &copy; Library System 2025</div>
                     <div>
-                        <a href="#">Gizlilik Politikası</a>
+                        <a href="#">Privacy Policy</a>
                         &middot;
-                        <a href="#">Şartlar &amp; Koşullar</a>
+                        <a href="#">Terms & Conditions</a>
                     </div>
                 </div>
             </div>

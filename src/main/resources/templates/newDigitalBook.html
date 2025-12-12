@@ -23,7 +23,7 @@
             <input type="text" class="form-control" th:field="*{bookName}" required>
         </div>
 
-        <!-- FORMAT -->
+
         <div class="mb-3">
             <label class="form-label">File Format</label>
             <input type="text" class="form-control"
@@ -32,7 +32,6 @@
                    th:value="${digitalBook.fileFormat}">
         </div>
 
-        <!-- URL -->
         <div class="mb-3">
             <label class="form-label">File URL</label>
             <input type="url" class="form-control"
@@ -41,8 +40,6 @@
                    th:value="${digitalBook.fileUrl}">
         </div>
 
-
-        <!-- AUTHOR -->
         <div class="mb-3">
             <label class="form-label">Author</label>
             <input type="text"
@@ -53,7 +50,6 @@
                    required>
         </div>
 
-        <!-- CATEGORY -->
         <div class="mb-3">
             <label class="form-label">Category</label>
             <input type="text"
@@ -64,7 +60,6 @@
                    required>
         </div>
 
-        <!-- LANGUAGE -->
         <div class="mb-3">
             <label class="form-label">Language</label>
             <input type="text"
@@ -75,10 +70,6 @@
                    required>
         </div>
 
-
-
-
-        <!-- EDITION NUMBER -->
         <div class="mb-3">
             <label class="form-label">Edition (optional)</label>
             <input type="number" class="form-control mb-2"
@@ -87,7 +78,6 @@
                    th:value="${digitalBook.edition != null ? digitalBook.edition.editionNumber : null}" />
         </div>
 
-        <!-- PUBLISHER -->
         <div class="mb-3">
             <label class="form-label">Publisher (optional)</label>
             <input type="text" class="form-control mb-2"
@@ -96,10 +86,6 @@
                    th:value="${digitalBook.edition != null ? digitalBook.edition.publisher : null}" />
         </div>
 
-
-
-
-        <!-- PAGE COUNT -->
         <div class="mb-3">
             <label class="form-label">Page Count</label>
             <input type="number"

@@ -11,7 +11,6 @@
     <h2>Manage Workers</h2>
     <hr/>
 
-    <!-- Back to Home button -->
     <div class="mb-3">
         <a class="btn btn-secondary"
            th:href="${systemSource == 'digital'} ? '/digital/worker/home' : '/library/worker/home'">
@@ -19,7 +18,6 @@
         </a>
     </div>
 
-    <!-- Add New Worker button -->
     <div class="mb-3">
         <a class="btn btn-success"
            th:href="@{'/workers/newWorker'(system=${systemSource})}">
@@ -42,24 +40,18 @@
         <tr th:each="w : ${workers}">
             <td th:text="${w.workerId}"></td>
 
-            <!-- 🔴 HATALIYDI: th:text="${w.person.name} + ' ' + ${w.person.surname}" -->
-            <!-- ✅ DOĞRUSU: tek bir expression içinde yazılmalı -->
             <td th:text="${w.person.name + ' ' + w.person.surname}"></td>
 
             <td th:text="${w.person.tel}"></td>
             <td th:text="${w.person.email}"></td>
             <td th:text="${w.person.personType}"></td>
             <td>
-                <!-- ✏ Edit -->
-                <!-- 🔴 Önceki: string birleştirme ile karışıktı -->
-                <!-- ✅ Thymeleaf path param stili -->
+
                 <a class="btn btn-sm btn-primary"
                    th:href="@{/workers/edit/{id}(id=${w.workerId}, system=${systemSource})}">
                     Edit
                 </a>
 
-                <!-- 🗑 Delete -->
-                <!-- Buradaki syntax aslında çalışır ama path-param versiyonunu kullanalım -->
                 <form th:action="@{/workers/{id}/delete(id=${w.workerId})}"
                       method="post"
                       style="display:inline;"

@@ -8,7 +8,7 @@
             crossorigin="anonymous"></script>
 
     <style>
-        /* Arka plan resmi */
+
         body.login-bg {
             background-image: url('/assets/img/library_b.jpeg');
             background-size: cover;
@@ -18,7 +18,6 @@
             min-height: 100vh;
         }
 
-        /* Tüm sayfayı ortalamak için */
         #layoutAuthentication {
             min-height: 100vh;
             display: flex;
@@ -26,7 +25,6 @@
             justify-content: center;
         }
 
-        /* Kartı saran wrapper – her ekranda ortada */
         .login-wrapper {
             display: flex;
             justify-content: center;
@@ -34,8 +32,6 @@
             width: 100%;
             padding: 1.5rem;
         }
-
-        /* Kart tasarımı – cam efekti + max genişlik */
         .login-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(8px);
@@ -44,8 +40,6 @@
             max-width: 420px;
             width: 100%;
         }
-
-        /* Giriş butonunu siyah yapalım */
         .btn-primary {
             background-color: #000 !important;
             border-color: #000 !important;
@@ -65,37 +59,37 @@
                 <div class="card login-card">
                     <div class="card-header">
                         <h3 class="text-center font-weight-light my-4"
-                            th:text="${loginTitle}">Giriş</h3>
+                            th:text="${loginTitle}">Log In</h3>
                     </div>
                     <div class="card-body">
                         <form th:action="@{/login}" method="post">
-                            <!-- sistem ve rol bilgilerini gizli taşıyoruz -->
+
                             <input type="hidden" name="system" th:value="${system}" />
                             <input type="hidden" name="role" th:value="${role}" />
 
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="inputEmail"
-                                       name="email" type="email" placeholder="E-posta" required />
-                                <label for="inputEmail">E-posta</label>
+                                       name="email" type="email" placeholder="Email" required />
+                                <label for="inputEmail">Email</label>
                             </div>
 
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="inputPassword"
-                                       name="password" type="password" placeholder="Şifre" required />
-                                <label for="inputPassword">Şifre</label>
+                                       name="password" type="password" placeholder="Password" required />
+                                <label for="inputPassword">Password</label>
                             </div>
 
                             <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                <a class="small" th:href="@{/}">Sistem Seçimine Dön</a>
-                                <button class="btn btn-primary" type="submit">Giriş Yap</button>
+                                <a class="small" th:href="@{/}">Return to System Selection</a>
+                                <button class="btn btn-primary" type="submit">Log In</button>
                             </div>
                         </form>
                     </div>
                     <div class="card-footer text-center py-3">
                         <div class="small">
-                            Kayıt işlemleri şimdilik sistem yöneticisi tarafından yapılmaktadır.
+                            Registration procedures are currently handled by the system administrator.
                         </div>
                     </div>
                 </div>

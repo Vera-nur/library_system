@@ -2,7 +2,7 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Üye Ödünç Arama</title>
+    <title>Search Member Borrowings</title>
 
     <!-- SB Admin / Bootstrap CSS -->
     <link href="/css/styles.css" rel="stylesheet"/>
@@ -105,9 +105,9 @@
         <main>
             <div class="container py-4">
 
-                <h2 class="text-center page-title">Üye Ödünç Arama</h2>
+                <h2 class="text-center page-title">Search Member Borrowings</h2>
                 <p class="text-center page-subtitle mb-4">
-                    Üye adını yazarak ödünç aldığı kitapları görüntüleyebilirsiniz.
+                    You can view the books borrowed by entering the member's name.
                 </p>
 
                 <!-- ARAMA KARTI -->
@@ -118,11 +118,11 @@
                               th:action="@{/library/borrow/search}" method="get">
 
                             <div class="col-md-8">
-                                <label class="form-label">Üye adı girin</label>
+                                <label class="form-label">Enter Member Name</label>
                                 <input class="form-control"
                                        type="text"
                                        name="name"
-                                       placeholder="Örnek: Melike"
+                                       placeholder="Example: Melike"
                                        th:value="${name}">
                             </div>
 
@@ -135,7 +135,7 @@
                             <div class="col-md-2 d-flex align-items-end">
                                 <a class="btn btn-outline-secondary w-100"
                                    th:href="@{/library/borrow/list}">
-                                    ← Tüm Ödünç İşlemlerine Dön
+                                    ← Back to All Borrowings
                                 </a>
                             </div>
                         </form>
@@ -146,31 +146,31 @@
                 <!-- SONUÇ TABLOSU -->
                 <div class="card glass-card" th:if="${borrows != null}">
                     <div class="card-header">
-                        <strong th:text="'Arama Sonuçları: ' + ${name}">Arama Sonuçları</strong>
+                        <strong th:text="'Search Results: ' + ${name}">Search Results</strong>
                     </div>
 
                     <div class="card-body p-0">
                         <table class="table mb-0 align-middle">
                             <thead>
                             <tr>
-                                <th>Kitap</th>
-                                <th>Alış Tarihi</th>
-                                <th>İade Tarihi</th>
-                                <th>Durum</th>
-                                <th class="text-end">İşlem</th>
+                                <th>Book</th>
+                                <th>Borrow Date</th>
+                                <th>Return Date</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="borrow : ${borrows}">
-                                <td th:text="${borrow.bookName}">Kitap</td>
+                                <td th:text="${borrow.bookName}">Book</td>
                                 <td th:text="${borrow.startDate}">2025-01-01</td>
                                 <td th:text="${borrow.endDate}">2025-01-15</td>
-                                <td th:text="${borrow.status}">Ödünçte</td>
+                                <td th:text="${borrow.status}">Borrowed</td>
                                 <td class="text-end">
                                     <form th:action="@{/library/borrow/return/{id}(id=${borrow.borrowBookId})}"
                                           method="post" style="display:inline;">
                                         <button class="btn btn-sm btn-outline-success">
-                                            Geri Al
+                                            Return Back
                                         </button>
                                     </form>
                                 </td>
@@ -178,7 +178,7 @@
 
                             <tr th:if="${#lists.isEmpty(borrows)}">
                                 <td colspan="5" class="text-center py-4">
-                                    Bu isimle eşleşen ödünç kaydı bulunamadı.
+                                    No borrowing records were found matching this name.
                                 </td>
                             </tr>
                             </tbody>
@@ -191,7 +191,7 @@
 
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
-                <div class="text-muted small">© 2025 Kütüphane Sistemi</div>
+                <div class="text-muted small">© 2025 Library System</div>
             </div>
         </footer>
     </div>

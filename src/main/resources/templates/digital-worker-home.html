@@ -13,9 +13,8 @@
             font-family: Arial, sans-serif;
         }
 
-        /* === ÜST NAVBAR ve SOL SİDEBAR AYNI RENK === */
         nav.navbar {
-            background-color: #111 !important;   /* aynı renk */
+            background-color: #111 !important;
             position: fixed;
             top: 0;
             left: 0;
@@ -29,9 +28,9 @@
             left: 0;
             width: 240px;
             height: 100vh;
-            background: #111;                    /* aynı renk */
+            background: #111;
             color: white;
-            padding-top: 70px;                  /* navbar yüksekliği kadar boşluk */
+            padding-top: 70px;
             z-index: 998;
         }
 
@@ -60,10 +59,9 @@
             color: #aaa;
         }
 
-        /* === SAĞ İÇERİK === */
         .content {
             margin-left: 260px;
-            margin-top: 90px;   /* başlık navbar’ın altında dursun */
+            margin-top: 90px;
             padding: 30px;
         }
 
@@ -98,7 +96,6 @@
 
 <body class="sb-nav-fixed">
 
-<!-- TOP NAVBAR -->
 <nav class="navbar navbar-expand navbar-dark">
     <div class="container-fluid">
 
@@ -124,10 +121,9 @@
 </nav>
 
 
-<!-- SOL SİYAH FULL YAN MENÜ -->
 <div class="sidebar">
 
-    <div class="sidebar-title">DİGİTAL SYSTEM</div>
+    <div class="sidebar-title">DIGITAL SYSTEM</div>
 
     <a th:href="@{/digital/worker/home}"
        th:classappend="${activePage} == 'digitalHome' ? ' active'">
@@ -152,7 +148,6 @@
 </div>
 
 
-<!-- SAĞ İÇERİK -->
 <div class="content">
 
     <h2 class="text-center page-title">Digital System – Worker Dashboard</h2>
