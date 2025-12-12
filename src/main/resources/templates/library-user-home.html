@@ -86,6 +86,7 @@
                                 <th>Start Date</th>
                                 <th>Due Date</th>
                                 <th>Status</th>
+                                <th>Fine Amount</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -93,14 +94,27 @@
                                 <td th:text="${borrow.bookName}"></td>
                                 <td th:text="${borrow.startDate}"></td>
                                 <td th:text="${borrow.endDate}"></td>
+
                                 <td>
                                     <span th:text="${borrow.status == 'Gecikmis' ? 'Overdue' : 'Borrowed'}"
                                           th:class="${borrow.status == 'Gecikmis'} ? 'badge bg-danger' : 'badge bg-success'">
                                     </span>
                                 </td>
+
+                                <td>
+                                    <span th:if="${borrow.estimatedFine > 0}"
+                                          class="text-danger fw-bold"
+                                          th:text="${borrow.estimatedFine + ' TL'}">
+                                    </span>
+
+                                    <span th:unless="${borrow.estimatedFine > 0}" class="text-secondary">
+                                        -
+                                    </span>
+                                </td>
                             </tr>
+
                             <tr th:if="${#lists.isEmpty(borrowList)}">
-                                <td colspan="4" class="text-center text-muted">You have not borrowed any books yet.</td>
+                                <td colspan="5" class="text-center text-muted">You have not borrowed any books yet.</td>
                             </tr>
                             </tbody>
                         </table>
