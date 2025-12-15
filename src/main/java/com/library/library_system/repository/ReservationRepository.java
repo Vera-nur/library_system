@@ -17,4 +17,9 @@ public interface ReservationRepository extends JpaRepository<Book, Integer> {
     @Transactional
     @Query(value = "EXEC sp_CreateReservation :userId, :bookId", nativeQuery = true)
     void createReservation(@Param("userId") Integer userId, @Param("bookId") Integer bookId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "EXEC sp_CheckAndCancelExpiredReservations", nativeQuery = true)
+    void executeCleanupProcedure();
 }

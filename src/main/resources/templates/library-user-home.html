@@ -160,6 +160,11 @@
                                         <i class="fas fa-hourglass-half me-1"></i> In Queue
                                     </span>
 
+                                    <span th:if="${res.statusCode == 'RES_EXPIRED'}"
+                                          class="badge bg-danger">
+                                        <i class="fas fa-times-circle me-1"></i> Expired (Time Out)
+                                    </span>
+
                                     <span th:if="${!(res.typeCode == 'HOLD' and res.statusCode == 'RES_ACTIVE') and !(res.typeCode == 'WAITLIST' and res.statusCode == 'RES_ACTIVE')}"
                                           class="badge bg-secondary"
                                           th:text="${res.statusDesc}">

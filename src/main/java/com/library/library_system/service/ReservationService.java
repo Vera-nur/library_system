@@ -14,4 +14,9 @@ public class ReservationService {
         // SP'yi çağırır. Stok varsa HOLD, yoksa WAITLIST yapar.
         reservationRepository.createReservation(userId, bookId);
     }
+
+    public void checkExpiredReservations() {
+        reservationRepository.executeCleanupProcedure();
+        System.out.println("Zamanlanmış Temizlik Görevi Tamamlandı: " + java.time.LocalDateTime.now());
+    }
 }
