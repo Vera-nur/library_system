@@ -45,8 +45,8 @@
                 <i class="fas fa-user fa-fw"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#!">Profile</a></li>
-                <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+<!--                <li><a class="dropdown-item" href="#!">Profile</a></li>-->
+<!--                <li><a class="dropdown-item" href="#!">Activity Log</a></li>-->
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
             </ul>
@@ -117,7 +117,7 @@
                         <div class="card bg-primary text-white mb-4">
                             <div class="card-body">Total Books <h2 th:text="${stats.totalBooks}">0</h2> </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="#!">View details</a>
+                                <!--<a class="small text-white stretched-link" href="#!">View details</a> -->
                                 <div class="small text-white">
                                     <i class="fas fa-angle-right"></i>
                                 </div>
@@ -129,9 +129,9 @@
                         <div class="card bg-success text-white mb-4">
                             <div class="card-body">Active Loans <h2 th:text="${stats.activeLoans}">0</h2> </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" th:href="@{/library/borrow/list}">
-                                    View list
-                                </a>
+<!--                                <a class="small text-white stretched-link" th:href="@{/library/borrow/list}">-->
+<!--                                    View list-->
+<!--                                </a>-->
                                 <div class="small text-white">
                                     <i class="fas fa-angle-right"></i>
                                 </div>
@@ -143,7 +143,7 @@
                         <div class="card bg-warning text-white mb-4">
                             <div class="card-body">Overdue Books <h2 th:text="${stats.overdueBooks}">0</h2> </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="#!">View overdue</a>
+<!--                                <a class="small text-white stretched-link" href="#!">View overdue</a>-->
                                 <div class="small text-white">
                                     <i class="fas fa-angle-right"></i>
                                 </div>
@@ -155,7 +155,7 @@
                         <div class="card bg-info text-white mb-4">
                             <div class="card-body">Total Members <h2 th:text="${stats.totalMembers}">0</h2> </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="#!">View members</a>
+<!--                                <a class="small text-white stretched-link" href="#!">View members</a>-->
                                 <div class="small text-white">
                                     <i class="fas fa-angle-right"></i>
                                 </div>
@@ -191,7 +191,7 @@
 
                                 <td>
                                     <span th:text="${borrow.status}"
-                                          th:class="${borrow.status == 'Gecikmiş' ? 'badge bg-danger' : 'badge bg-success'}">
+                                          th:class="${borrow.status == 'Gecikmis' ? 'badge bg-danger' : 'badge bg-success'}">
                                     </span>
                                 </td>
 
