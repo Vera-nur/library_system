@@ -1,11 +1,14 @@
 package com.library.library_system.controller;
 
+
 import com.library.library_system.entity.*;
 import com.library.library_system.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -152,7 +155,12 @@ public class digitalbookController {
 
 
     @GetMapping("/delete/{id}")
+    @Transactional
     public String deleteDigitalBook(@PathVariable("id") Integer id) {
+        // ✅ 1) Önce o kitaba bağlı tüm logları sil
+        digitalAccessLogRepository.deleteAllByDigitalBookId(id);
+
+        // ✅ 2) Sonra kitabı sil
         digitalBookRepository.deleteById(id);
         return "redirect:/digital/worker/home";
     }
